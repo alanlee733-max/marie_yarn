@@ -1,6 +1,6 @@
 /* 브랜드 목록 */
 
-document.addEventListener("DOMContentLoaded", () => {
+function initBrands() {
   const list = document.getElementById("brand-list");
   if (!list) return;
 
@@ -13,15 +13,21 @@ document.addEventListener("DOMContentLoaded", () => {
           <p class="br-country">${esc(b.country)} · ${count}종 취급</p>
         </div>
         <p class="br-story">${esc(b.story)}</p>
-        <a class="btn btn--ghost" href="products.html?brand=${encodeURIComponent(b.slug)}">
+        <a class="btn btn--ghost" href="${href("products", "brand=" + encodeURIComponent(b.slug))}">
           ${esc(b.name)} 제품 보기
         </a>
       </article>`;
   }).join("");
 
-  /* 주소에 #브랜드슬러그 가 있으면 해당 위치로 */
-  if (location.hash) {
-    const target = document.getElementById(location.hash.slice(1));
+  /* ?b=브랜드슬러그 또는 #브랜드슬러그 로 들어오면 해당 위치로 */
+  const anchor =
+    urlParams().get("b") ||
+    (!window.PREVIEW_MODE && location.hash ? location.hash.slice(1) : "");
+
+  if (anchor) {
+    const target = document.getElementById(anchor);
     if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
   }
-});
+}
+
+document.addEventListener("DOMContentLoaded", initBrands);

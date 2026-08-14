@@ -2,11 +2,11 @@
    제품 상세 — product.html?slug=fjord-merino
    ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+function initProductDetail() {
   const root = document.getElementById("detail-root");
   if (!root) return;
 
-  const slug = new URLSearchParams(location.search).get("slug");
+  const slug = urlParams().get("slug");
   const p = slug ? getProduct(slug) : null;
 
   if (!p) {
@@ -14,8 +14,10 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="empty-state" style="grid-column:1/-1">
         <h3>찾으시는 실이 없습니다</h3>
         <p>주소가 잘못되었거나 판매가 종료된 제품입니다.</p>
-        <p style="margin-top:24px"><a class="btn btn--ghost" href="products.html">전체 제품 보기</a></p>
+        <p style="margin-top:24px"><a class="btn btn--ghost" href="${href("products")}">전체 제품 보기</a></p>
       </div>`;
+    const section = document.getElementById("related-section");
+    if (section) section.hidden = true;
     return;
   }
 
@@ -85,8 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
       <div class="detail-info">
         <nav class="breadcrumb" aria-label="위치">
-          <a href="products.html">제품</a><span>/</span>
-          <a href="brands.html#${esc(p.brandSlug)}">${esc(brand ? brand.name : "")}</a><span>/</span>
+          <a href="${href("products")}">제품</a><span>/</span>
+          <a href="${href("brands", "b=" + encodeURIComponent(p.brandSlug))}">${esc(brand ? brand.name : "")}</a><span>/</span>
           ${esc(p.name)}
         </nav>
 
@@ -156,15 +158,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ---------- 같은 브랜드의 다른 실 ---------- */
   const related = document.getElementById("related-grid");
+  const section = document.getElementById("related-section");
   if (related) {
     const list = PRODUCTS.filter((x) => x.brandSlug === p.brandSlug && x.slug !== p.slug);
-    if (list.length) {
-      related.innerHTML = list.map(productCard).join("");
-      const head = document.getElementById("related-title");
-      if (head) head.textContent = `${brand ? brand.name : ""}의 다른 실`;
-    } else {
-      const section = document.getElementById("related-section");
-      if (section) section.remove();
-    }
+    related.innerHTML = list.map(productCard).join("");
+    if (section) section.hidden = list.length === 0;
+    const head = document.getElementById("related-title");
+    if (head) head.textContent = `${brand ? brand.name : ""}의 다른 실`;
   }
-});
+}
+
+document.addEventListener("DOMContentLoaded", initProductDetail);

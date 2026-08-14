@@ -1,9 +1,9 @@
 /* =========================================================
    제품 카탈로그 — 필터 · 정렬
-   필터 상태를 URL 쿼리에 반영해서 공유와 뒤로가기가 동작하게 한다.
+   필터 상태를 주소에 반영해서 공유와 뒤로가기가 동작하게 한다.
    ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+function initCatalog() {
   const grid = document.getElementById("catalog-grid");
   if (!grid) return;
 
@@ -72,12 +72,12 @@ document.addEventListener("DOMContentLoaded", () => {
     '<button class="btn btn--ghost btn--block" id="reset-filters" type="button">필터 초기화</button>',
   ].join("");
 
-  /* ---------- URL ↔ 필터 동기화 ---------- */
+  /* ---------- 주소 ↔ 필터 동기화 ---------- */
 
   const KEYS = ["brand", "weight", "material", "family", "stock"];
 
   function readUrl() {
-    const q = new URLSearchParams(location.search);
+    const q = urlParams();
     const state = {};
     KEYS.forEach((k) => {
       const raw = q.get(k);
@@ -93,8 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (state[k].length) q.set(k, state[k].join(","));
     });
     if (state.sort !== "new") q.set("sort", state.sort);
-    const qs = q.toString();
-    history.replaceState(null, "", qs ? `?${qs}` : location.pathname);
+    setUrlQuery(q.toString());
   }
 
   function applyStateToInputs(state) {
@@ -166,12 +165,11 @@ document.addEventListener("DOMContentLoaded", () => {
   filterEl.addEventListener("change", render);
   if (sortEl) sortEl.addEventListener("change", render);
 
-  document.addEventListener("click", (e) => {
-    if (e.target.closest("#reset-filters")) {
-      filterEl.querySelectorAll("input[type=checkbox]").forEach((i) => (i.checked = false));
-      if (sortEl) sortEl.value = "new";
-      render();
-    }
+  filterEl.addEventListener("click", (e) => {
+    if (!e.target.closest("#reset-filters")) return;
+    filterEl.querySelectorAll("input[type=checkbox]").forEach((i) => (i.checked = false));
+    if (sortEl) sortEl.value = "new";
+    render();
   });
 
   if (toggleEl) {
@@ -184,4 +182,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   applyStateToInputs(readUrl());
   render();
-});
+}
+
+document.addEventListener("DOMContentLoaded", initCatalog);

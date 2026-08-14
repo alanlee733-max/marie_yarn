@@ -1,6 +1,6 @@
 /* 홈 화면 렌더링 */
 
-document.addEventListener("DOMContentLoaded", () => {
+function initHome() {
   /* 히어로 실타래 — 대표 색 3개 */
   const art = document.getElementById("hero-art");
   if (art) {
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (strip) {
     strip.innerHTML = BRANDS.map(
       (b) => `
-      <a href="brands.html#${esc(b.slug)}">
+      <a href="${href("brands", "b=" + encodeURIComponent(b.slug))}">
         <div class="bs-name">${esc(b.name)}</div>
         <div class="bs-country">${esc(b.country)}</div>
       </a>`
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .map((hex) => `<span style="background:${esc(hex)}"></span>`)
           .join("");
         return `
-        <a class="family-tile" href="products.html?family=${encodeURIComponent(f)}">
+        <a class="family-tile" href="${href("products", "family=" + encodeURIComponent(f))}">
           <div class="family-swatches">${sw}</div>
           <div class="family-name">${esc(FAMILY_LABELS[f] || f)}</div>
           <div class="family-count">${counts[f]}종의 실</div>
@@ -65,4 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .join("");
   }
-});
+}
+
+document.addEventListener("DOMContentLoaded", initHome);

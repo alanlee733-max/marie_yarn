@@ -1,6 +1,6 @@
 /* 문의 페이지 — 탭 전환 및 폼 처리 */
 
-document.addEventListener("DOMContentLoaded", () => {
+function initContact() {
   /* 연락처 정보는 data.js 한 곳에서 관리 */
   const emailEl = document.querySelector("[data-site-email]");
   if (emailEl) {
@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* 도매 문의의 관심 브랜드 목록 */
   const brandSelect = document.querySelector("[data-brand-options]");
-  if (brandSelect) {
+  if (brandSelect && !brandSelect.dataset.filled) {
+    brandSelect.dataset.filled = "1";
     brandSelect.insertAdjacentHTML(
       "beforeend",
       BRANDS.map((b) => `<option value="${esc(b.slug)}">${esc(b.name)}</option>`).join("")
@@ -25,6 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
     { tab: document.getElementById("tab-wholesale"), panel: document.getElementById("panel-wholesale") },
   ].filter((t) => t.tab && t.panel);
 
+  if (!tabs.length) return;
+
   function select(index) {
     tabs.forEach((t, i) => {
       t.tab.setAttribute("aria-selected", String(i === index));
@@ -34,12 +37,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   tabs.forEach((t, i) => t.tab.addEventListener("click", () => select(i)));
 
-  /* contact.html?type=wholesale 로 들어오면 도매 탭부터 */
-  if (new URLSearchParams(location.search).get("type") === "wholesale") select(1);
+  /* ?type=wholesale 로 들어오면 도매 탭부터 */
+  select(urlParams().get("type") === "wholesale" ? 1 : 0);
 
   /* ---------- 폼 제출 ----------
      아직 백엔드가 없다. 연동 전까지는 안내만 띄운다. */
   document.querySelectorAll("[data-contact-form]").forEach((form) => {
+    if (form.dataset.bound) return;
+    form.dataset.bound = "1";
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const notice = form.querySelector(".notice");
@@ -51,4 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-});
+}
+
+document.addEventListener("DOMContentLoaded", initContact);

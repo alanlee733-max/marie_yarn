@@ -1,0 +1,2275 @@
+<meta charset="utf-8">
+<title>marie yarn</title>
+
+<style>
+/* =========================================================
+   marie yarn — v1 stylesheet
+   따뜻한 뉴트럴 위에 실 색만 살리는 것이 이 디자인의 원칙.
+   UI가 채도를 가지면 실 색이 죽는다.
+   ========================================================= */
+
+/* ---------- tokens ---------- */
+:root {
+  --bg: #faf8f5;
+  --surface: #ffffff;
+  --surface-2: #f2ede6;
+  --surface-3: #e9e2d8;
+
+  --ink: #23201c;
+  --ink-2: #5c554b;
+  --ink-3: #8d8478;
+  --line: #e3dbd0;
+  --line-2: #d3c9bb;
+
+  --accent: #9c5b44;
+  --accent-soft: #f5ebe5;
+  --naver: #03c75a;
+  --naver-dark: #02a84c;
+
+  --sans: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    "Malgun Gothic", "맑은 고딕", system-ui, sans-serif;
+  --serif: "Nanum Myeongjo", "Apple SD Gothic Neo", "Batang", "바탕", Georgia, serif;
+
+  --wrap: 1200px;
+  --radius: 4px;
+  --radius-lg: 10px;
+
+  --shadow: 0 1px 2px rgba(35, 32, 28, 0.04), 0 8px 24px rgba(35, 32, 28, 0.06);
+}
+
+/* ---------- reset ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+}
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; }
+
+h1, h2, h3, h4 {
+  font-family: var(--serif);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- layout ---------- */
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+.section { padding-block: 88px; }
+.section--tight { padding-block: 56px; }
+.section--alt { background: var(--surface-2); }
+
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 36px;
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 10px;
+}
+
+.section-title { font-size: 30px; }
+.section-desc {
+  color: var(--ink-2);
+  font-size: 15px;
+  margin-top: 10px;
+  max-width: 56ch;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+.skip-link:focus {
+  left: 16px; top: 16px;
+  z-index: 100;
+  background: var(--ink);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 24px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  text-align: center;
+}
+
+.btn--primary { background: var(--ink); color: #fff; }
+.btn--primary:hover { background: #3a352e; }
+
+.btn--ghost {
+  background: transparent;
+  border-color: var(--line-2);
+  color: var(--ink);
+}
+.btn--ghost:hover { border-color: var(--ink); background: rgba(35, 32, 28, 0.03); }
+
+/* 네이버 그린은 구매 버튼에서만 쓴다. 다른 UI로 번지면 실 색과 충돌한다. */
+.btn--naver { background: var(--naver); color: #fff; }
+.btn--naver:hover { background: var(--naver-dark); }
+
+.btn--block { width: 100%; }
+.btn--lg { padding: 16px 30px; font-size: 15px; }
+
+.btn[disabled],
+.btn--disabled {
+  background: var(--surface-3);
+  color: var(--ink-3);
+  cursor: not-allowed;
+  pointer-events: none;
+  border-color: transparent;
+}
+
+.link-more {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-2);
+  border-bottom: 1px solid var(--line-2);
+  padding-bottom: 2px;
+  white-space: nowrap;
+}
+.link-more:hover { color: var(--ink); border-color: var(--ink); }
+
+/* ---------- header ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(250, 248, 245, 0.92);
+  backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  height: 68px;
+}
+
+.logo {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+.logo em { font-style: italic; color: var(--accent); }
+
+.nav {
+  display: flex;
+  gap: 28px;
+  margin-right: auto;
+  font-size: 15px;
+}
+.nav a { color: var(--ink-2); padding-block: 6px; }
+.nav a:hover,
+.nav a[aria-current="page"] { color: var(--ink); }
+
+.header-cta { padding: 10px 18px; }
+
+.nav-toggle {
+  display: none;
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+@media (max-width: 860px) {
+  .header-inner { height: 60px; gap: 12px; }
+  .nav-toggle { display: block; }
+  .nav {
+    position: absolute;
+    inset: 100% 0 auto 0;
+    flex-direction: column;
+    gap: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding: 8px 24px 20px;
+    display: none;
+  }
+  .nav[data-open="true"] { display: flex; }
+  .nav a { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .header-cta { display: none; }
+}
+
+/* ---------- 실타래 플레이스홀더 ----------
+   실제 제품 사진이 들어오기 전까지 컬러웨이 hex로 실타래를 그린다.
+   사진이 준비되면 .skein 을 <img> 로 교체하면 된다. */
+.skein-frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--surface-2);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.skein {
+  position: relative;
+  overflow: hidden; /* 라벨 밴드가 실타래 밖으로 삐져나오지 않게 */
+  width: 68%;
+  aspect-ratio: 1 / 1.12;
+  border-radius: 46% / 38%;
+  background:
+    repeating-linear-gradient(114deg,
+      rgba(255, 255, 255, 0.22) 0 2px,
+      rgba(255, 255, 255, 0) 2px 6px,
+      rgba(0, 0, 0, 0.07) 6px 8px,
+      rgba(0, 0, 0, 0) 8px 13px),
+    repeating-linear-gradient(66deg,
+      rgba(255, 255, 255, 0.14) 0 2px,
+      rgba(255, 255, 255, 0) 2px 7px,
+      rgba(0, 0, 0, 0.05) 7px 9px,
+      rgba(0, 0, 0, 0) 9px 15px),
+    var(--c, #ccc);
+  box-shadow:
+    inset 0 -14px 30px rgba(0, 0, 0, 0.16),
+    inset 0 10px 24px rgba(255, 255, 255, 0.2),
+    0 10px 26px rgba(35, 32, 28, 0.1);
+}
+
+/* 실타래 라벨 밴드 */
+.skein::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 44%;
+  height: 13%;
+  background: rgba(255, 255, 255, 0.88);
+  border-block: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.skein--lg { width: 60%; }
+
+/* ---------- 제품 카드 ---------- */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 40px 28px;
+}
+
+.product-card { display: flex; flex-direction: column; }
+.product-card .skein-frame { transition: transform 0.3s ease; }
+.product-card:hover .skein-frame { transform: translateY(-4px); }
+
+.card-brand {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: 16px;
+}
+
+.card-name {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.card-meta {
+  font-size: 13px;
+  color: var(--ink-2);
+  margin-top: 6px;
+}
+
+.card-price {
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+/* 컬러칩: 원형이 아니라 둥근 사각형. 실 색 면적이 더 넓게 보인다. */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.chip {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: var(--c);
+  flex-shrink: 0;
+}
+
+.chip-more {
+  font-size: 12px;
+  color: var(--ink-3);
+  align-self: center;
+  margin-left: 2px;
+}
+
+.badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+}
+.badge--incoming { background: var(--accent); }
+.badge--sold { background: var(--ink-3); }
+.badge--new { background: var(--surface); color: var(--ink); border: 1px solid var(--line-2); }
+
+/* ---------- hero ---------- */
+.hero {
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 60px;
+  align-items: center;
+  padding-block: 96px;
+}
+
+.hero h1 {
+  font-size: clamp(34px, 4.6vw, 54px);
+  line-height: 1.28;
+  letter-spacing: -0.03em;
+}
+
+.hero p {
+  color: var(--ink-2);
+  margin-top: 24px;
+  font-size: 17px;
+  max-width: 44ch;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 36px;
+  flex-wrap: wrap;
+}
+
+/* 히어로 실타래 3개 겹치기 */
+.hero-art {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  align-items: center;
+}
+.hero-art .skein { width: 100%; }
+.hero-art > div:nth-child(1) { transform: translateY(-26px) rotate(-5deg); }
+.hero-art > div:nth-child(3) { transform: translateY(26px) rotate(5deg); }
+
+@media (max-width: 860px) {
+  .hero-inner {
+    grid-template-columns: 1fr;
+    gap: 44px;
+    padding-block: 56px;
+  }
+  .hero-art { max-width: 320px; }
+  .section { padding-block: 60px; }
+}
+
+/* ---------- 브랜드 스트립 ---------- */
+.brand-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.brand-strip a {
+  background: var(--bg);
+  padding: 30px 16px;
+  text-align: center;
+  transition: background-color 0.18s ease;
+}
+.brand-strip a:hover { background: var(--surface); }
+
+.brand-strip .bs-name {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 700;
+}
+.brand-strip .bs-country {
+  font-size: 12px;
+  color: var(--ink-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* ---------- 색 계열 큐레이션 ---------- */
+.family-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.family-tile {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  background: var(--surface);
+  transition: border-color 0.18s ease;
+}
+.family-tile:hover { border-color: var(--ink); }
+
+.family-swatches {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.family-swatches span {
+  height: 34px;
+  flex: 1;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.family-name { font-size: 14px; font-weight: 600; }
+.family-count { font-size: 12px; color: var(--ink-3); }
+
+/* ---------- 3분할 값 제안 ---------- */
+.value-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 40px;
+}
+.value-item h3 { font-size: 19px; margin-bottom: 10px; }
+.value-item p { color: var(--ink-2); font-size: 15px; }
+.value-num {
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+}
+
+/* ---------- 구독 배너 ---------- */
+.subscribe {
+  background: var(--ink);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: 56px 48px;
+  text-align: center;
+}
+.subscribe h2 { font-size: 27px; color: #fff; }
+.subscribe p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 12px;
+  font-size: 15px;
+}
+
+.subscribe-form {
+  display: flex;
+  gap: 8px;
+  max-width: 440px;
+  margin: 28px auto 0;
+}
+
+.subscribe-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 13px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-family: inherit;
+}
+.subscribe-form input::placeholder { color: rgba(255, 255, 255, 0.45); }
+.subscribe-form .btn { background: #fff; color: var(--ink); flex-shrink: 0; }
+.subscribe-form .btn:hover { background: rgba(255, 255, 255, 0.86); }
+
+.form-note {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 14px;
+}
+
+@media (max-width: 560px) {
+  .subscribe { padding: 40px 24px; }
+  .subscribe-form { flex-direction: column; }
+}
+
+/* ---------- footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding-block: 56px 40px;
+  margin-top: 0;
+  background: var(--surface-2);
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--line-2);
+}
+
+.footer-col h4 {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+.footer-col li { margin-bottom: 9px; font-size: 14px; }
+.footer-col a { color: var(--ink-2); }
+.footer-col a:hover { color: var(--ink); }
+
+.footer-brand p {
+  color: var(--ink-2);
+  font-size: 14px;
+  margin-top: 12px;
+  max-width: 34ch;
+}
+
+.biz-info {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  line-height: 1.9;
+  padding-top: 28px;
+}
+.biz-info .biz-row span { margin-right: 18px; white-space: nowrap; }
+.copyright { margin-top: 14px; }
+
+@media (max-width: 860px) {
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .footer-brand { grid-column: 1 / -1; }
+}
+
+/* ---------- 카탈로그 ---------- */
+.page-head {
+  border-bottom: 1px solid var(--line);
+  padding-block: 48px 40px;
+  background: var(--surface-2);
+}
+.page-head h1 { font-size: 36px; }
+.page-head p { color: var(--ink-2); margin-top: 12px; max-width: 60ch; }
+
+.catalog-layout {
+  display: grid;
+  grid-template-columns: 232px 1fr;
+  gap: 48px;
+  align-items: start;
+  padding-block: 48px 96px;
+}
+
+.filters { position: sticky; top: 92px; }
+
+.filter-group { border-bottom: 1px solid var(--line); padding-bottom: 20px; margin-bottom: 20px; }
+.filter-group:last-of-type { border-bottom: 0; }
+
+.filter-group h3 {
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.filter-opt {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 14px;
+  color: var(--ink-2);
+  padding: 5px 0;
+  cursor: pointer;
+}
+.filter-opt input { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; }
+.filter-opt:hover { color: var(--ink); }
+.filter-opt .sw {
+  width: 15px; height: 15px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+.catalog-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+.result-count { font-size: 14px; color: var(--ink-2); }
+.result-count strong { color: var(--ink); }
+
+.sort-select {
+  padding: 9px 14px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 90px 20px;
+  color: var(--ink-3);
+}
+.empty-state h3 { font-size: 20px; color: var(--ink); margin-bottom: 10px; }
+
+.filter-toggle { display: none; }
+
+@media (max-width: 900px) {
+  .catalog-layout { grid-template-columns: 1fr; gap: 24px; padding-block: 32px 64px; }
+  .filters {
+    position: static;
+    display: none;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px;
+    background: var(--surface);
+  }
+  .filters[data-open="true"] { display: block; }
+  .filter-toggle { display: inline-flex; }
+}
+
+/* ---------- 제품 상세 ---------- */
+.detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  padding-block: 48px 96px;
+  align-items: start;
+}
+
+.detail-media { position: sticky; top: 92px; }
+.detail-media .skein-frame { aspect-ratio: 1 / 1; border-radius: var(--radius-lg); }
+
+.swatch-note {
+  font-size: 12.5px;
+  color: var(--ink-3);
+  margin-top: 12px;
+  text-align: center;
+}
+
+.breadcrumb { font-size: 13px; color: var(--ink-3); margin-bottom: 14px; }
+.breadcrumb a:hover { color: var(--ink); }
+.breadcrumb span { margin-inline: 6px; }
+
+.detail-brand {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+.detail-title { font-size: 34px; margin-top: 8px; }
+.detail-desc { color: var(--ink-2); margin-top: 18px; font-size: 15.5px; }
+
+.detail-price {
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: 22px;
+  font-family: var(--serif);
+}
+.detail-price small {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ink-3);
+  font-family: var(--sans);
+  margin-left: 8px;
+}
+
+.colorway-block { margin-top: 34px; }
+.colorway-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+.colorway-label { font-size: 13px; font-weight: 600; letter-spacing: 0.04em; }
+.colorway-current { font-size: 13px; color: var(--ink-2); }
+
+.colorway-grid { display: flex; flex-wrap: wrap; gap: 9px; }
+
+.cw {
+  width: 42px;
+  height: 42px;
+  border-radius: 7px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: var(--c);
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  transition: transform 0.15s ease;
+}
+.cw:hover { transform: scale(1.06); }
+.cw[aria-pressed="true"] {
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--ink);
+}
+.cw[data-stock="sold_out"] { opacity: 0.4; }
+
+.buy-block { margin-top: 32px; display: flex; flex-direction: column; gap: 10px; }
+.buy-note { font-size: 12.5px; color: var(--ink-3); text-align: center; }
+
+/* 스펙 표는 접지 않는다. 중급 뜨개인은 이걸 보고 산다. */
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 36px;
+  font-size: 14.5px;
+}
+.spec-table caption {
+  text-align: left;
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+  padding-bottom: 12px;
+}
+.spec-table th,
+.spec-table td {
+  text-align: left;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.spec-table th {
+  width: 34%;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+.spec-table td { color: var(--ink); }
+
+.usage-hint {
+  background: var(--accent-soft);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-top: 28px;
+  font-size: 14px;
+  color: #6d3f2f;
+}
+.usage-hint strong { display: block; margin-bottom: 6px; font-size: 13px; }
+
+@media (max-width: 900px) {
+  .detail-layout { grid-template-columns: 1fr; gap: 36px; padding-block: 28px 64px; }
+  .detail-media { position: static; }
+  .detail-title { font-size: 27px; }
+}
+
+/* ---------- 가이드 / 본문 페이지 ---------- */
+.prose { max-width: 760px; padding-block: 56px 96px; }
+.prose h2 { font-size: 25px; margin-top: 52px; margin-bottom: 16px; }
+.prose h2:first-child { margin-top: 0; }
+.prose h3 { font-size: 18px; margin-top: 30px; margin-bottom: 8px; }
+.prose p { color: var(--ink-2); margin-bottom: 14px; }
+.prose ul { margin-bottom: 16px; }
+.prose ul li {
+  color: var(--ink-2);
+  padding-left: 16px;
+  position: relative;
+  margin-bottom: 7px;
+}
+.prose ul li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 12px;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--line-2);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-block: 20px 28px;
+}
+.data-table th,
+.data-table td {
+  text-align: left;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.data-table thead th {
+  background: var(--surface-2);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+  border-bottom: 1px solid var(--line-2);
+}
+.data-table td { color: var(--ink-2); }
+.data-table td:first-child { color: var(--ink); font-weight: 600; }
+
+.table-scroll { overflow-x: auto; }
+
+/* ---------- 폼 ---------- */
+.form-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 64px;
+  padding-block: 56px 96px;
+  align-items: start;
+}
+
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 32px; }
+.tab {
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 12px 18px;
+  font-size: 15px;
+  color: var(--ink-3);
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); font-weight: 600; }
+
+.field { margin-bottom: 20px; }
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+.field .req { color: var(--accent); margin-left: 3px; }
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 14.5px;
+  font-family: inherit;
+  color: var(--ink);
+}
+.field textarea { min-height: 150px; resize: vertical; }
+.field input:focus,
+.field select:focus,
+.field textarea:focus { border-color: var(--ink); outline: none; }
+
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.consent {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13.5px;
+  color: var(--ink-2);
+  margin-block: 24px;
+}
+.consent input { margin-top: 4px; accent-color: var(--accent); }
+.consent a { border-bottom: 1px solid var(--line-2); }
+
+.side-card {
+  background: var(--surface-2);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+.side-card h3 { font-size: 17px; margin-bottom: 14px; }
+.side-card dl { margin: 0; font-size: 14px; }
+.side-card dt {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: 16px;
+}
+.side-card dt:first-child { margin-top: 0; }
+.side-card dd { margin: 3px 0 0; color: var(--ink); }
+
+.notice {
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  font-size: 13.5px;
+  margin-top: 16px;
+  display: none;
+}
+.notice[data-show="true"] { display: block; }
+.notice--warn { background: var(--accent-soft); color: #6d3f2f; }
+
+@media (max-width: 900px) {
+  .form-layout { grid-template-columns: 1fr; gap: 40px; padding-block: 32px 64px; }
+  .field-row { grid-template-columns: 1fr; gap: 0; }
+}
+
+/* ---------- 브랜드 목록 ---------- */
+.brand-list { display: flex; flex-direction: column; gap: 1px; background: var(--line); }
+
+.brand-row {
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  gap: 32px;
+  align-items: center;
+  background: var(--bg);
+  padding: 32px 4px;
+}
+.brand-row .br-name { font-family: var(--serif); font-size: 23px; font-weight: 700; }
+.brand-row .br-country {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+.brand-row .br-story { color: var(--ink-2); font-size: 15px; }
+
+@media (max-width: 760px) {
+  .brand-row { grid-template-columns: 1fr; gap: 12px; padding: 26px 4px; }
+}
+
+/* ---------- 접근성 유틸 ---------- */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* ---------- 미리보기 전용 ---------- */
+.preview-bar {
+  background: var(--ink);
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 12.5px;
+  line-height: 1.6;
+  text-align: center;
+  padding: 9px 24px;
+}
+.preview-bar strong { color: #fff; font-weight: 600; }
+.preview-bar span { opacity: 0.6; }
+</style>
+
+<div class="preview-bar">
+  <strong>미리보기</strong> — 브랜드 · 제품 · 가격 · 사업자 정보는 모두 샘플입니다.
+  <span>실제 데이터로 교체 전 화면 확인용입니다.</span>
+</div>
+
+<header class="site-header">
+    <div class="wrap header-inner">
+      <a class="logo" href="#home">marie <em>yarn</em></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav">메뉴</button>
+      <nav class="nav" id="nav">
+        <a href="#products">제품</a>
+        <a href="#brands">브랜드</a>
+        <a href="#guide">실 고르기</a>
+        <a href="#about">소개</a>
+        <a href="#contact">문의</a>
+      </nav>
+      <a class="btn btn--naver header-cta" data-naver-store href="#" target="_blank" rel="noopener">네이버 스토어</a>
+    </div>
+  </header>
+
+<main id="main"></main>
+
+<footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-col footer-brand">
+          <a class="logo" href="#home">marie <em>yarn</em></a>
+          <p>해외 뜨개실을 직접 수입해 국내에 유통합니다.</p>
+        </div>
+        <div class="footer-col">
+          <h4>제품</h4>
+          <ul>
+            <li><a href="#products">전체 제품</a></li>
+            <li><a href="#brands">브랜드</a></li>
+            <li><a href="#guide">실 고르기 가이드</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>안내</h4>
+          <ul>
+            <li><a href="#about">회사 소개</a></li>
+            <li><a href="#faq">자주 묻는 질문</a></li>
+            <li><a href="#privacy">개인정보처리방침</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>구매 · 문의</h4>
+          <ul>
+            <li><a data-naver-store href="#" target="_blank" rel="noopener">네이버 스토어</a></li>
+            <li><a data-instagram href="#" target="_blank" rel="noopener">인스타그램</a></li>
+            <li><a href="#contact">도매 · 취급 문의</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="biz-info" data-biz></div>
+    </div>
+  </footer>
+
+<script>window.PREVIEW_MODE = true;</script>
+
+<script>
+/* =========================================================
+   marie yarn — 사이트 설정 및 제품 데이터
+   ---------------------------------------------------------
+   ⚠️ 아래 브랜드/제품/가격/사업자정보는 전부 화면 확인용 샘플이다.
+      실제 취급 브랜드와 스펙으로 교체해야 한다.
+
+   구조는 docs/v1-plan.md 5장의 데이터 모델을 그대로 따른다.
+   나중에 Next.js로 옮길 때 이 파일이 그대로 JSON이 된다.
+   ========================================================= */
+
+const SITE = {
+  name: "marie yarn",
+  nameKo: "마리얀",
+  tagline: "유럽과 남미의 실을 직접 골라 들여옵니다",
+  description:
+    "marie yarn은 해외 뜨개실을 직접 수입해 국내에 유통합니다. 손으로 만져보고 떠본 실만 들여옵니다.",
+
+  /* 네이버 스마트스토어 --------------------------------------------------
+     제품별 URL은 각 제품의 naverProductUrl 에 넣는다.
+     비어 있으면 아래 스토어 메인으로 폴백한다. */
+  naverStoreUrl: "https://smartstore.naver.com/marieyarn",
+
+  instagram: "https://instagram.com/",
+  kakaoChannel: "https://pf.kakao.com/",
+  email: "hello@marieyarn.kr",
+  phone: "02-0000-0000",
+  hours: "평일 10:00 – 17:00 (점심 12:00 – 13:00)",
+
+  /* 전자상거래법 표시 항목 — 실제 값으로 교체 필요 */
+  business: {
+    company: "마리얀",
+    ceo: "OOO",
+    regNo: "000-00-00000",
+    address: "서울특별시 OO구 OO로 00, 0층",
+  },
+};
+
+/* ---------- 코드 → 한글 라벨 ---------- */
+
+const WEIGHT_LABELS = {
+  lace: "레이스",
+  fingering: "핑거링",
+  sport: "스포츠",
+  dk: "DK",
+  worsted: "워스티드",
+  bulky: "벌키",
+  jumbo: "점보",
+};
+
+/* 필터 정렬 순서 (가는 것 → 굵은 것) */
+const WEIGHT_ORDER = ["lace", "fingering", "sport", "dk", "worsted", "bulky", "jumbo"];
+
+const FAMILY_LABELS = {
+  white: "화이트 · 아이보리",
+  beige: "베이지 · 오트밀",
+  brown: "브라운 · 카멜",
+  gray: "그레이 · 차콜",
+  black: "블랙",
+  red: "레드 · 와인",
+  pink: "핑크",
+  orange: "오렌지 · 테라코타",
+  yellow: "옐로우 · 머스터드",
+  green: "그린 · 올리브",
+  blue: "블루 · 네이비",
+  purple: "퍼플 · 라벤더",
+};
+
+const STOCK_LABELS = {
+  in_stock: "판매 중",
+  incoming: "입고 예정",
+  sold_out: "품절",
+  discontinued: "단종",
+};
+
+/* ---------- 브랜드 ---------- */
+
+const BRANDS = [
+  {
+    slug: "nordfil",
+    name: "Nordfil",
+    nameKo: "노르필",
+    country: "노르웨이",
+    story:
+      "노르웨이 서부 해안의 소규모 방적소에서 시작한 브랜드입니다. 한랭지 양모 특유의 탄력을 살리기 위해 저온에서 천천히 방적하며, 염색은 지금도 소량 배치로만 진행합니다. 오래 입을 겉옷을 뜨는 실입니다.",
+  },
+  {
+    slug: "casa-lana",
+    name: "Casa Lana",
+    nameKo: "카사 라나",
+    country: "이탈리아",
+    story:
+      "비엘라 지역의 3대째 가족 방적소입니다. 이탈리아 방적 특유의 균일한 실 두께와 부드러운 마무리가 특징이며, 메리노와 캐시미어 블렌드에 강점이 있습니다. 피부에 직접 닿는 옷에 잘 맞습니다.",
+  },
+  {
+    slug: "maison-fil",
+    name: "Maison Fil",
+    nameKo: "메종 필",
+    country: "프랑스",
+    story:
+      "리옹 기반의 소규모 실 브랜드로, 색 배합을 가장 중요하게 다룹니다. 채도를 한 단계 낮춘 특유의 팔레트 덕분에 여러 색을 함께 떠도 잘 어울립니다. 모헤어와 코튼 라인이 대표적입니다.",
+  },
+  {
+    slug: "alba-wool",
+    name: "Alba Wool",
+    nameKo: "알바 울",
+    country: "페루",
+    story:
+      "페루 안데스 고산지대의 알파카 목장과 직접 거래하는 브랜드입니다. 사육 단계부터 섬유 굵기를 관리해 알파카 특유의 가려움을 크게 줄였습니다. 가볍고 따뜻한 실을 찾는다면 이 브랜드입니다.",
+  },
+];
+
+/* ---------- 제품 ----------
+   colorways 를 배열로 두는 것이 핵심이다.
+   v2에서 장바구니를 붙일 때 이 배열이 그대로 SKU가 된다. */
+
+const PRODUCTS = [
+  {
+    slug: "fjord-merino",
+    name: "Fjord Merino",
+    brandSlug: "nordfil",
+    description:
+      "노르필의 기본이 되는 메리노 100% 실입니다. 탄력이 좋아 조직이 또렷하게 살아나며, 케이블이나 아란 무늬를 뜰 때 특히 잘 어울립니다. 처음 노르필을 써본다면 이 실부터 권합니다.",
+    fiber: [{ material: "메리노울", percent: 100 }],
+    weightGram: 50,
+    lengthMeter: 175,
+    yarnWeight: "dk",
+    gauge: "10 × 10cm = 22코 30단",
+    needleSize: "4.0 – 4.5mm",
+    hookSize: "4.0mm",
+    careInstructions: "손세탁 · 30℃ 이하 · 뉘어서 건조 · 표백 금지",
+    origin: "노르웨이",
+    retailPrice: 9800,
+    stock: "in_stock",
+    releasedAt: "2026-03-02",
+    featured: true,
+    naverProductUrl: "",
+    colorways: [
+      { code: "FM-01", name: "스노우", hex: "#f2ede4", colorFamily: "white", stock: "in_stock" },
+      { code: "FM-04", name: "오트밀", hex: "#ddceb6", colorFamily: "beige", stock: "in_stock" },
+      { code: "FM-09", name: "포그 그레이", hex: "#a8a49d", colorFamily: "gray", stock: "in_stock" },
+      { code: "FM-12", name: "딥 차콜", hex: "#4a4844", colorFamily: "gray", stock: "in_stock" },
+      { code: "FM-21", name: "모스 그린", hex: "#7d8560", colorFamily: "green", stock: "in_stock" },
+      { code: "FM-27", name: "피오르 블루", hex: "#5c7183", colorFamily: "blue", stock: "sold_out" },
+      { code: "FM-33", name: "러스트", hex: "#a8613f", colorFamily: "orange", stock: "in_stock" },
+      { code: "FM-38", name: "와인", hex: "#7a3a42", colorFamily: "red", stock: "in_stock" },
+    ],
+  },
+  {
+    slug: "frost-alpaca-silk",
+    name: "Frost Alpaca Silk",
+    brandSlug: "nordfil",
+    description:
+      "알파카에 실크를 섞어 광택을 더한 레이스 굵기 실입니다. 한 겹으로 뜨면 비치는 숄이, 다른 실과 합사하면 은은한 광택이 더해진 니트가 나옵니다. 합사용으로 특히 많이 찾습니다.",
+    fiber: [
+      { material: "베이비 알파카", percent: 70 },
+      { material: "머시리즈드 실크", percent: 30 },
+    ],
+    weightGram: 25,
+    lengthMeter: 210,
+    yarnWeight: "lace",
+    gauge: "10 × 10cm = 28코 36단 (3.0mm 기준)",
+    needleSize: "2.5 – 3.5mm",
+    hookSize: "2.5mm",
+    careInstructions: "손세탁 · 찬물 · 비틀지 말고 눌러 물기 제거 · 뉘어서 건조",
+    origin: "노르웨이",
+    retailPrice: 13500,
+    stock: "in_stock",
+    releasedAt: "2026-04-18",
+    featured: false,
+    naverProductUrl: "",
+    colorways: [
+      { code: "FA-02", name: "아이보리", hex: "#efe7d9", colorFamily: "white", stock: "in_stock" },
+      { code: "FA-07", name: "샌드", hex: "#cfbca2", colorFamily: "beige", stock: "in_stock" },
+      { code: "FA-15", name: "실버 미스트", hex: "#b6b3ae", colorFamily: "gray", stock: "in_stock" },
+      { code: "FA-23", name: "더스티 로즈", hex: "#c4948e", colorFamily: "pink", stock: "in_stock" },
+      { code: "FA-31", name: "세이지", hex: "#9aa88d", colorFamily: "green", stock: "in_stock" },
+      { code: "FA-44", name: "미드나잇", hex: "#3c4353", colorFamily: "blue", stock: "in_stock" },
+    ],
+  },
+  {
+    slug: "toscana-worsted",
+    name: "Toscana Worsted",
+    brandSlug: "casa-lana",
+    description:
+      "메리노에 캐시미어를 20% 섞어 부드러움을 끌어올린 워스티드 실입니다. 겉뜨기만으로도 표면이 고르게 나오기 때문에 무늬 없이 뜨는 스웨터에 잘 맞습니다. 목에 직접 닿아도 자극이 적습니다.",
+    fiber: [
+      { material: "엑스트라 파인 메리노", percent: 80 },
+      { material: "캐시미어", percent: 20 },
+    ],
+    weightGram: 50,
+    lengthMeter: 120,
+    yarnWeight: "worsted",
+    gauge: "10 × 10cm = 18코 24단",
+    needleSize: "4.5 – 5.5mm",
+    hookSize: "5.0mm",
+    careInstructions: "드라이클리닝 권장 · 손세탁 시 찬물 · 뉘어서 건조",
+    origin: "이탈리아",
+    retailPrice: 16800,
+    stock: "in_stock",
+    releasedAt: "2026-02-10",
+    featured: true,
+    naverProductUrl: "",
+    colorways: [
+      { code: "TW-100", name: "밀크", hex: "#f0e9de", colorFamily: "white", stock: "in_stock" },
+      { code: "TW-140", name: "카멜", hex: "#b98f5f", colorFamily: "brown", stock: "in_stock" },
+      { code: "TW-160", name: "에스프레소", hex: "#5b463a", colorFamily: "brown", stock: "in_stock" },
+      { code: "TW-220", name: "페일 그레이", hex: "#c2beb7", colorFamily: "gray", stock: "sold_out" },
+      { code: "TW-310", name: "올리브", hex: "#77784f", colorFamily: "green", stock: "in_stock" },
+      { code: "TW-420", name: "인디고", hex: "#44546b", colorFamily: "blue", stock: "in_stock" },
+      { code: "TW-510", name: "브릭", hex: "#9e5340", colorFamily: "orange", stock: "in_stock" },
+    ],
+  },
+  {
+    slug: "lino-fresco",
+    name: "Lino Fresco",
+    brandSlug: "casa-lana",
+    description:
+      "린넨 100% 실로, 처음에는 약간 뻣뻣하지만 세탁을 거듭할수록 부드러워집니다. 여름 상의나 가방, 소품에 적합하며 물빠짐이 적어 색이 오래갑니다.",
+    fiber: [{ material: "린넨", percent: 100 }],
+    weightGram: 50,
+    lengthMeter: 135,
+    yarnWeight: "sport",
+    gauge: "10 × 10cm = 24코 30단",
+    needleSize: "3.0 – 3.5mm",
+    hookSize: "3.0mm",
+    careInstructions: "세탁기 사용 가능 (울코스 · 30℃) · 건조기 사용 금지",
+    origin: "이탈리아",
+    retailPrice: 8900,
+    stock: "incoming",
+    releasedAt: "2026-05-20",
+    featured: false,
+    naverProductUrl: "",
+    colorways: [
+      { code: "LF-01", name: "내추럴", hex: "#e2d9c6", colorFamily: "beige", stock: "incoming" },
+      { code: "LF-06", name: "테라코타", hex: "#bf7554", colorFamily: "orange", stock: "incoming" },
+      { code: "LF-11", name: "머스터드", hex: "#c9a247", colorFamily: "yellow", stock: "incoming" },
+      { code: "LF-18", name: "라군", hex: "#6f95a0", colorFamily: "blue", stock: "incoming" },
+      { code: "LF-24", name: "포레스트", hex: "#4f6b53", colorFamily: "green", stock: "incoming" },
+      { code: "LF-30", name: "잉크", hex: "#3a3d47", colorFamily: "gray", stock: "incoming" },
+    ],
+  },
+  {
+    slug: "brume-mohair",
+    name: "Brume Mohair",
+    brandSlug: "maison-fil",
+    description:
+      "키드모헤어에 실크를 섞은 얇은 실입니다. 단독으로 뜨면 구름처럼 가벼운 옷이, 다른 실과 합사하면 부드러운 잔털이 더해집니다. 메종 필의 낮은 채도 팔레트가 가장 잘 드러나는 라인입니다.",
+    fiber: [
+      { material: "키드모헤어", percent: 72 },
+      { material: "실크", percent: 28 },
+    ],
+    weightGram: 25,
+    lengthMeter: 230,
+    yarnWeight: "lace",
+    gauge: "10 × 10cm = 24코 32단 (3.5mm 기준)",
+    needleSize: "3.0 – 4.0mm",
+    hookSize: "3.0mm",
+    careInstructions: "손세탁 · 찬물 · 뉘어서 건조 · 다림질 금지",
+    origin: "프랑스",
+    retailPrice: 14200,
+    stock: "in_stock",
+    releasedAt: "2026-04-02",
+    featured: true,
+    naverProductUrl: "",
+    colorways: [
+      { code: "BM-01", name: "브륌", hex: "#e8e2d8", colorFamily: "white", stock: "in_stock" },
+      { code: "BM-05", name: "누드", hex: "#d9c0ae", colorFamily: "beige", stock: "in_stock" },
+      { code: "BM-12", name: "푸드르", hex: "#d3a7a5", colorFamily: "pink", stock: "in_stock" },
+      { code: "BM-19", name: "라벤더", hex: "#a297ac", colorFamily: "purple", stock: "in_stock" },
+      { code: "BM-26", name: "셀라돈", hex: "#a3b5a3", colorFamily: "green", stock: "in_stock" },
+      { code: "BM-33", name: "아르두아즈", hex: "#7c848c", colorFamily: "gray", stock: "in_stock" },
+      { code: "BM-41", name: "뷔르고뉴", hex: "#7c4348", colorFamily: "red", stock: "sold_out" },
+      { code: "BM-48", name: "누아", hex: "#2f2d2c", colorFamily: "black", stock: "in_stock" },
+    ],
+  },
+  {
+    slug: "coton-doux",
+    name: "Coton Doux",
+    brandSlug: "maison-fil",
+    description:
+      "꼬임을 약하게 준 코튼 100% 실입니다. 일반적인 면사보다 부드럽고 무게감이 덜해 여름 옷에 부담이 없습니다. 아기 옷이나 피부가 예민한 분께 자주 권합니다.",
+    fiber: [{ material: "이집션 코튼", percent: 100 }],
+    weightGram: 50,
+    lengthMeter: 105,
+    yarnWeight: "dk",
+    gauge: "10 × 10cm = 21코 28단",
+    needleSize: "4.0 – 4.5mm",
+    hookSize: "4.0mm",
+    careInstructions: "세탁기 사용 가능 (울코스 · 30℃) · 뉘어서 건조",
+    origin: "프랑스",
+    retailPrice: 7600,
+    stock: "in_stock",
+    releasedAt: "2026-01-15",
+    featured: false,
+    naverProductUrl: "",
+    colorways: [
+      { code: "CD-01", name: "블랑", hex: "#f4f1ea", colorFamily: "white", stock: "in_stock" },
+      { code: "CD-08", name: "사블", hex: "#dbc9ad", colorFamily: "beige", stock: "in_stock" },
+      { code: "CD-14", name: "아프리코", hex: "#dda57e", colorFamily: "orange", stock: "in_stock" },
+      { code: "CD-22", name: "시엘", hex: "#9db6c6", colorFamily: "blue", stock: "in_stock" },
+      { code: "CD-29", name: "망트", hex: "#96bba6", colorFamily: "green", stock: "in_stock" },
+      { code: "CD-36", name: "그리", hex: "#9b9791", colorFamily: "gray", stock: "in_stock" },
+    ],
+  },
+  {
+    slug: "andes-bulky",
+    name: "Andes Bulky",
+    brandSlug: "alba-wool",
+    description:
+      "알파카와 울을 반씩 섞은 굵은 실입니다. 굵기에 비해 가벼워 큰 옷을 떠도 어깨가 무겁지 않습니다. 대바늘 8mm 기준으로 하루 이틀이면 목도리 하나가 완성됩니다.",
+    fiber: [
+      { material: "알파카", percent: 50 },
+      { material: "메리노울", percent: 50 },
+    ],
+    weightGram: 100,
+    lengthMeter: 90,
+    yarnWeight: "bulky",
+    gauge: "10 × 10cm = 12코 16단",
+    needleSize: "7.0 – 9.0mm",
+    hookSize: "8.0mm",
+    careInstructions: "손세탁 · 찬물 · 뉘어서 건조 · 물에서 들어올릴 때 받쳐서",
+    origin: "페루",
+    retailPrice: 15400,
+    stock: "in_stock",
+    releasedAt: "2026-05-06",
+    featured: false,
+    naverProductUrl: "",
+    colorways: [
+      { code: "AB-02", name: "라마 화이트", hex: "#ece5da", colorFamily: "white", stock: "in_stock" },
+      { code: "AB-10", name: "비쿠냐", hex: "#c39c78", colorFamily: "brown", stock: "in_stock" },
+      { code: "AB-16", name: "코코아", hex: "#6b5145", colorFamily: "brown", stock: "in_stock" },
+      { code: "AB-25", name: "스톤", hex: "#a5a099", colorFamily: "gray", stock: "in_stock" },
+      { code: "AB-34", name: "안데스 그린", hex: "#5f7261", colorFamily: "green", stock: "in_stock" },
+      { code: "AB-47", name: "클레이", hex: "#b06a51", colorFamily: "orange", stock: "sold_out" },
+    ],
+  },
+  {
+    slug: "puna-fingering",
+    name: "Puna Fingering",
+    brandSlug: "alba-wool",
+    description:
+      "알파카에 나일론을 섞어 마찰에 강하게 만든 얇은 실입니다. 양말이나 장갑처럼 오래 신고 쓰는 물건에 적합하며, 400m 한 볼로 양말 한 켤레가 나옵니다.",
+    fiber: [
+      { material: "베이비 알파카", percent: 80 },
+      { material: "나일론", percent: 20 },
+    ],
+    weightGram: 50,
+    lengthMeter: 400,
+    yarnWeight: "fingering",
+    gauge: "10 × 10cm = 30코 40단",
+    needleSize: "2.25 – 2.75mm",
+    hookSize: "2.5mm",
+    careInstructions: "세탁기 사용 가능 (울코스 · 30℃) · 뉘어서 건조",
+    origin: "페루",
+    retailPrice: 12900,
+    stock: "in_stock",
+    releasedAt: "2026-06-01",
+    featured: true,
+    naverProductUrl: "",
+    colorways: [
+      { code: "PF-03", name: "내추럴 화이트", hex: "#eee8dd", colorFamily: "white", stock: "in_stock" },
+      { code: "PF-09", name: "토프", hex: "#b7a48d", colorFamily: "beige", stock: "in_stock" },
+      { code: "PF-17", name: "차콜", hex: "#4d4b49", colorFamily: "gray", stock: "in_stock" },
+      { code: "PF-24", name: "머스터드", hex: "#c39c3e", colorFamily: "yellow", stock: "in_stock" },
+      { code: "PF-31", name: "포레스트", hex: "#47604e", colorFamily: "green", stock: "in_stock" },
+      { code: "PF-38", name: "네이비", hex: "#39455c", colorFamily: "blue", stock: "in_stock" },
+      { code: "PF-45", name: "플럼", hex: "#6d4a5e", colorFamily: "purple", stock: "in_stock" },
+    ],
+  },
+];
+
+/* =========================================================
+   marie yarn — 공통 스크립트
+   모든 페이지에서 data.js 다음에 로드된다.
+
+   각 페이지 스크립트는 initXxx() 함수를 노출한다.
+   멀티 페이지에서는 DOMContentLoaded 때 한 번 실행되고,
+   단일 파일 미리보기(tools/build-preview.js)에서는 화면을 바꿀 때마다
+   라우터가 다시 호출한다.
+   ========================================================= */
+
+/* ---------- 유틸 ---------- */
+
+function esc(str) {
+  return String(str ?? "").replace(/[&<>"']/g, (c) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  }[c]));
+}
+
+function won(n) {
+  return typeof n === "number" ? n.toLocaleString("ko-KR") + "원" : "가격 문의";
+}
+
+function getBrand(slug) {
+  return BRANDS.find((b) => b.slug === slug);
+}
+
+function getProduct(slug) {
+  return PRODUCTS.find((p) => p.slug === slug);
+}
+
+/** [{메리노울,80},{실크,20}] → "메리노울 80% · 실크 20%" */
+function fiberText(fiber) {
+  return fiber.map((f) => `${f.material} ${f.percent}%`).join(" · ");
+}
+
+function weightLabel(w) {
+  return WEIGHT_LABELS[w] || w;
+}
+
+/* ---------- 주소 쿼리 ----------
+   멀티 페이지에서는 ?slug=... , 미리보기에서는 #product?slug=... 로 들어온다.
+   양쪽 모두에서 같은 코드가 동작하도록 여기서 흡수한다. */
+
+function urlParams() {
+  const hash = location.hash;
+  const q = hash.indexOf("?");
+  if (q !== -1) return new URLSearchParams(hash.slice(q + 1));
+  return new URLSearchParams(location.search);
+}
+
+function setUrlQuery(qs) {
+  if (window.PREVIEW_MODE) {
+    const base = (location.hash.split("?")[0] || "#home");
+    history.replaceState(null, "", qs ? `${base}?${qs}` : base);
+  } else {
+    history.replaceState(null, "", qs ? `?${qs}` : location.pathname);
+  }
+}
+
+/* ---------- 네이버 스토어 연결 ----------
+   제품별 상품 URL이 있으면 그쪽으로, 없으면 스토어 메인으로 보낸다.
+   나중에 네이버페이 결제형 API로 바꿀 때 이 함수만 교체하면 된다. */
+function naverUrl(product) {
+  return product && product.naverProductUrl ? product.naverProductUrl : SITE.naverStoreUrl;
+}
+
+/* ---------- 대표 색상 고르기 ----------
+   목록에서 첫 번째 색을 그대로 쓰면 대개 아이보리라 카드가 전부 하얗게 보인다.
+   가장 채도가 높은 색을 대표로 세워야 목록에서 실이 구분된다.
+   실제 대표 사진이 준비되면 이 함수는 필요 없어진다. */
+function chroma(hex) {
+  const n = parseInt(hex.replace("#", ""), 16);
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return Math.max(r, g, b) - Math.min(r, g, b);
+}
+
+function coverColorway(p) {
+  const pool = p.colorways.filter((c) => c.stock !== "sold_out");
+  const list = pool.length ? pool : p.colorways;
+  return list.reduce((best, c) => (chroma(c.hex) > chroma(best.hex) ? c : best), list[0]);
+}
+
+/* ---------- 실타래 플레이스홀더 ----------
+   실제 사진이 준비되면 아래 innerHTML을 <img>로 교체한다. */
+function skeinFrame(hex, label, opts = {}) {
+  const badge = opts.badge || "";
+  const big = opts.large ? " skein--lg" : "";
+  return `
+    <div class="skein-frame">
+      ${badge}
+      <div class="skein${big}" style="--c:${esc(hex)}" role="img" aria-label="${esc(label)}"></div>
+    </div>`;
+}
+
+function stockBadge(stock) {
+  if (stock === "incoming") return '<span class="badge badge--incoming">입고 예정</span>';
+  if (stock === "sold_out") return '<span class="badge badge--sold">품절</span>';
+  if (stock === "discontinued") return '<span class="badge badge--sold">단종</span>';
+  return "";
+}
+
+/* ---------- 컬러칩 ---------- */
+function chipsMarkup(colorways, max = 8) {
+  const shown = colorways.slice(0, max);
+  const rest = colorways.length - shown.length;
+  const chips = shown
+    .map((c) => `<span class="chip" style="--c:${esc(c.hex)}" title="${esc(c.name)}"></span>`)
+    .join("");
+  return `<div class="chips" aria-label="색상 ${colorways.length}종">${chips}${
+    rest > 0 ? `<span class="chip-more">+${rest}</span>` : ""
+  }</div>`;
+}
+
+/* ---------- 링크 ----------
+   미리보기에서는 페이지 이동이 해시로 바뀐다. */
+function href(page, query) {
+  const qs = query ? `?${query}` : "";
+  return window.PREVIEW_MODE ? `#${page}${qs}` : `${page}.html${qs}`;
+}
+
+/* ---------- 제품 카드 ---------- */
+function productCard(p) {
+  const brand = getBrand(p.brandSlug);
+  const cover = coverColorway(p);
+  return `
+    <a class="product-card" href="${href("product", "slug=" + encodeURIComponent(p.slug))}">
+      ${skeinFrame(cover.hex, `${p.name} 실타래`, { badge: stockBadge(p.stock) })}
+      <p class="card-brand">${esc(brand ? brand.name : "")}</p>
+      <h3 class="card-name">${esc(p.name)}</h3>
+      <p class="card-meta">${esc(weightLabel(p.yarnWeight))} · ${esc(fiberText(p.fiber))}</p>
+      <p class="card-meta">${p.weightGram}g / ${p.lengthMeter}m</p>
+      <p class="card-price">${won(p.retailPrice)}</p>
+      ${chipsMarkup(p.colorways)}
+    </a>`;
+}
+
+/* ---------- 구매 버튼 ----------
+   재고 상태에 따라 CTA가 달라진다.
+   판매 중 → 네이버 스토어 / 입고 예정 → 알림 / 품절 → 문의 */
+function buyBlock(p) {
+  const url = esc(naverUrl(p));
+  if (p.stock === "in_stock") {
+    return `
+      <a class="btn btn--naver btn--lg btn--block" href="${url}" target="_blank" rel="noopener">
+        네이버 스토어에서 구매
+      </a>
+      <a class="btn btn--ghost btn--block" href="${href("contact")}">이 실 문의하기</a>
+      <p class="buy-note">결제는 네이버 스마트스토어에서 진행됩니다. 새 창으로 열립니다.</p>`;
+  }
+  if (p.stock === "incoming") {
+    return `
+      <button class="btn btn--primary btn--lg btn--block" data-subscribe-scroll>입고 알림 받기</button>
+      <a class="btn btn--ghost btn--block" href="${url}" target="_blank" rel="noopener">
+        네이버 스토어 둘러보기
+      </a>
+      <p class="buy-note">입고되면 등록하신 이메일로 가장 먼저 알려드립니다.</p>`;
+  }
+  return `
+    <span class="btn btn--lg btn--block btn--disabled">품절</span>
+    <a class="btn btn--ghost btn--block" href="${href("contact")}">재입고 문의하기</a>`;
+}
+
+/* =========================================================
+   공통 초기화
+   화면이 바뀔 때마다 다시 불려도 안전해야 한다.
+   ========================================================= */
+
+function initCommon(scope) {
+  scope = scope || document;
+
+  /* 네이버 스토어 · 인스타그램 링크는 SITE 한 곳에서 관리 */
+  scope.querySelectorAll("[data-naver-store]").forEach((el) => {
+    el.setAttribute("href", SITE.naverStoreUrl);
+  });
+  scope.querySelectorAll("[data-instagram]").forEach((el) => {
+    el.setAttribute("href", SITE.instagram);
+  });
+
+  /* 사업자정보 — 값이 바뀌면 data.js 만 고치면 된다 */
+  const biz = document.querySelector("[data-biz]");
+  if (biz && !biz.dataset.filled) {
+    const b = SITE.business;
+    biz.dataset.filled = "1";
+    biz.innerHTML = `
+      <div class="biz-row">
+        <span>상호 ${esc(b.company)}</span>
+        <span>대표 ${esc(b.ceo)}</span>
+        <span>사업자등록번호 ${esc(b.regNo)}</span>
+      </div>
+      <div class="biz-row">
+        <span>주소 ${esc(b.address)}</span>
+        <span>이메일 ${esc(SITE.email)}</span>
+      </div>
+      <p class="copyright">© ${new Date().getFullYear()} ${esc(SITE.name)}. All rights reserved.</p>`;
+  }
+
+  /* 구독 폼 — 아직 백엔드가 없다 */
+  scope.querySelectorAll("[data-subscribe-form]").forEach((form) => {
+    if (form.dataset.bound) return;
+    form.dataset.bound = "1";
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const note = form.parentElement.querySelector(".form-note");
+      if (note) {
+        note.textContent =
+          "폼은 아직 연동 전입니다. 메일 발송(스티비·메일침프 등) 연결이 필요합니다.";
+      }
+    });
+  });
+}
+
+/* 한 번만 걸면 되는 이벤트 */
+function bindGlobalHandlers() {
+  const toggle = document.querySelector(".nav-toggle");
+  const nav = document.getElementById("nav");
+  if (toggle && nav) {
+    toggle.addEventListener("click", () => {
+      const open = nav.getAttribute("data-open") === "true";
+      nav.setAttribute("data-open", String(!open));
+      toggle.setAttribute("aria-expanded", String(!open));
+    });
+  }
+
+  /* 상세 페이지의 '입고 알림 받기' → 하단 구독 폼으로 */
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-subscribe-scroll]");
+    if (!btn) return;
+    const target = document.getElementById("subscribe");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+      const input = target.querySelector("input");
+      if (input) setTimeout(() => input.focus(), 400);
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  bindGlobalHandlers();
+  initCommon(document);
+});
+
+/* 홈 화면 렌더링 */
+
+function initHome() {
+  /* 히어로 실타래 — 대표 색 3개 */
+  const art = document.getElementById("hero-art");
+  if (art) {
+    const picks = ["#ddceb6", "#7d8560", "#a8613f"];
+    art.innerHTML = picks
+      .map(
+        (hex) =>
+          `<div><div class="skein" style="--c:${hex}" role="presentation"></div></div>`
+      )
+      .join("");
+  }
+
+  /* 취급 브랜드 */
+  const strip = document.getElementById("brand-strip");
+  if (strip) {
+    strip.innerHTML = BRANDS.map(
+      (b) => `
+      <a href="${href("brands", "b=" + encodeURIComponent(b.slug))}">
+        <div class="bs-name">${esc(b.name)}</div>
+        <div class="bs-country">${esc(b.country)}</div>
+      </a>`
+    ).join("");
+  }
+
+  /* 추천 실 */
+  const featured = document.getElementById("featured-products");
+  if (featured) {
+    featured.innerHTML = PRODUCTS.filter((p) => p.featured).map(productCard).join("");
+  }
+
+  /* 색 계열 큐레이션 — 클릭하면 카탈로그 필터로 이어진다 */
+  const familyGrid = document.getElementById("family-grid");
+  if (familyGrid) {
+    const counts = {};
+    const swatches = {};
+
+    PRODUCTS.forEach((p) => {
+      const seen = new Set();
+      p.colorways.forEach((c) => {
+        if (!seen.has(c.colorFamily)) {
+          seen.add(c.colorFamily);
+          counts[c.colorFamily] = (counts[c.colorFamily] || 0) + 1;
+        }
+        (swatches[c.colorFamily] = swatches[c.colorFamily] || []).push(c.hex);
+      });
+    });
+
+    const families = Object.keys(counts).sort((a, b) => counts[b] - counts[a]).slice(0, 6);
+
+    familyGrid.innerHTML = families
+      .map((f) => {
+        const sw = swatches[f]
+          .slice(0, 3)
+          .map((hex) => `<span style="background:${esc(hex)}"></span>`)
+          .join("");
+        return `
+        <a class="family-tile" href="${href("products", "family=" + encodeURIComponent(f))}">
+          <div class="family-swatches">${sw}</div>
+          <div class="family-name">${esc(FAMILY_LABELS[f] || f)}</div>
+          <div class="family-count">${counts[f]}종의 실</div>
+        </a>`;
+      })
+      .join("");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", initHome);
+
+/* =========================================================
+   제품 카탈로그 — 필터 · 정렬
+   필터 상태를 주소에 반영해서 공유와 뒤로가기가 동작하게 한다.
+   ========================================================= */
+
+function initCatalog() {
+  const grid = document.getElementById("catalog-grid");
+  if (!grid) return;
+
+  const filterEl = document.getElementById("filters");
+  const countEl = document.getElementById("result-count");
+  const sortEl = document.getElementById("sort");
+  const toggleEl = document.getElementById("filter-toggle");
+
+  /* ---------- 필터 옵션 구성 (데이터에서 자동 추출) ---------- */
+
+  const usedWeights = WEIGHT_ORDER.filter((w) => PRODUCTS.some((p) => p.yarnWeight === w));
+
+  const usedMaterials = [
+    ...new Set(PRODUCTS.flatMap((p) => p.fiber.map((f) => f.material))),
+  ].sort();
+
+  const familyHex = {};
+  const usedFamilies = [];
+  PRODUCTS.forEach((p) =>
+    p.colorways.forEach((c) => {
+      if (!familyHex[c.colorFamily]) {
+        familyHex[c.colorFamily] = c.hex;
+        usedFamilies.push(c.colorFamily);
+      }
+    })
+  );
+
+  function group(title, key, options) {
+    return `
+      <div class="filter-group">
+        <h3>${esc(title)}</h3>
+        ${options
+          .map(
+            (o) => `
+          <label class="filter-opt">
+            <input type="checkbox" data-key="${key}" value="${esc(o.value)}">
+            ${o.swatch ? `<span class="sw" style="background:${esc(o.swatch)}"></span>` : ""}
+            <span>${esc(o.label)}</span>
+          </label>`
+          )
+          .join("")}
+      </div>`;
+  }
+
+  filterEl.innerHTML = [
+    group("브랜드", "brand", BRANDS.map((b) => ({ value: b.slug, label: b.name }))),
+    group(
+      "굵기",
+      "weight",
+      usedWeights.map((w) => ({ value: w, label: weightLabel(w) }))
+    ),
+    group("소재", "material", usedMaterials.map((m) => ({ value: m, label: m }))),
+    group(
+      "색 계열",
+      "family",
+      usedFamilies.map((f) => ({
+        value: f,
+        label: FAMILY_LABELS[f] || f,
+        swatch: familyHex[f],
+      }))
+    ),
+    group("상태", "stock", [
+      { value: "in_stock", label: "판매 중" },
+      { value: "incoming", label: "입고 예정" },
+    ]),
+    '<button class="btn btn--ghost btn--block" id="reset-filters" type="button">필터 초기화</button>',
+  ].join("");
+
+  /* ---------- 주소 ↔ 필터 동기화 ---------- */
+
+  const KEYS = ["brand", "weight", "material", "family", "stock"];
+
+  function readUrl() {
+    const q = urlParams();
+    const state = {};
+    KEYS.forEach((k) => {
+      const raw = q.get(k);
+      state[k] = raw ? raw.split(",").filter(Boolean) : [];
+    });
+    state.sort = q.get("sort") || "new";
+    return state;
+  }
+
+  function writeUrl(state) {
+    const q = new URLSearchParams();
+    KEYS.forEach((k) => {
+      if (state[k].length) q.set(k, state[k].join(","));
+    });
+    if (state.sort !== "new") q.set("sort", state.sort);
+    setUrlQuery(q.toString());
+  }
+
+  function applyStateToInputs(state) {
+    filterEl.querySelectorAll("input[type=checkbox]").forEach((input) => {
+      input.checked = state[input.dataset.key].includes(input.value);
+    });
+    if (sortEl) sortEl.value = state.sort;
+  }
+
+  function readInputs() {
+    const state = {};
+    KEYS.forEach((k) => (state[k] = []));
+    filterEl.querySelectorAll("input[type=checkbox]:checked").forEach((input) => {
+      state[input.dataset.key].push(input.value);
+    });
+    state.sort = sortEl ? sortEl.value : "new";
+    return state;
+  }
+
+  /* ---------- 필터링 ---------- */
+
+  function matches(p, state) {
+    if (state.brand.length && !state.brand.includes(p.brandSlug)) return false;
+    if (state.weight.length && !state.weight.includes(p.yarnWeight)) return false;
+    if (state.stock.length && !state.stock.includes(p.stock)) return false;
+
+    if (state.material.length) {
+      const mats = p.fiber.map((f) => f.material);
+      if (!state.material.some((m) => mats.includes(m))) return false;
+    }
+
+    if (state.family.length) {
+      const fams = p.colorways.map((c) => c.colorFamily);
+      if (!state.family.some((f) => fams.includes(f))) return false;
+    }
+
+    return true;
+  }
+
+  function sortList(list, sort) {
+    const out = [...list];
+    if (sort === "name") out.sort((a, b) => a.name.localeCompare(b.name));
+    else if (sort === "price_asc") out.sort((a, b) => a.retailPrice - b.retailPrice);
+    else if (sort === "price_desc") out.sort((a, b) => b.retailPrice - a.retailPrice);
+    else out.sort((a, b) => b.releasedAt.localeCompare(a.releasedAt));
+    return out;
+  }
+
+  function render() {
+    const state = readInputs();
+    writeUrl(state);
+
+    const list = sortList(PRODUCTS.filter((p) => matches(p, state)), state.sort);
+
+    countEl.innerHTML = `총 <strong>${list.length}</strong>개의 실`;
+
+    grid.innerHTML = list.length
+      ? list.map(productCard).join("")
+      : `<div class="empty-state">
+           <h3>조건에 맞는 실이 없습니다</h3>
+           <p>필터를 줄여서 다시 찾아보세요.</p>
+         </div>`;
+
+    grid.classList.toggle("product-grid", list.length > 0);
+  }
+
+  /* ---------- 이벤트 ---------- */
+
+  filterEl.addEventListener("change", render);
+  if (sortEl) sortEl.addEventListener("change", render);
+
+  filterEl.addEventListener("click", (e) => {
+    if (!e.target.closest("#reset-filters")) return;
+    filterEl.querySelectorAll("input[type=checkbox]").forEach((i) => (i.checked = false));
+    if (sortEl) sortEl.value = "new";
+    render();
+  });
+
+  if (toggleEl) {
+    toggleEl.addEventListener("click", () => {
+      const open = filterEl.getAttribute("data-open") === "true";
+      filterEl.setAttribute("data-open", String(!open));
+      toggleEl.setAttribute("aria-expanded", String(!open));
+    });
+  }
+
+  applyStateToInputs(readUrl());
+  render();
+}
+
+document.addEventListener("DOMContentLoaded", initCatalog);
+
+/* =========================================================
+   제품 상세 — product.html?slug=fjord-merino
+   ========================================================= */
+
+function initProductDetail() {
+  const root = document.getElementById("detail-root");
+  if (!root) return;
+
+  const slug = urlParams().get("slug");
+  const p = slug ? getProduct(slug) : null;
+
+  if (!p) {
+    root.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1">
+        <h3>찾으시는 실이 없습니다</h3>
+        <p>주소가 잘못되었거나 판매가 종료된 제품입니다.</p>
+        <p style="margin-top:24px"><a class="btn btn--ghost" href="${href("products")}">전체 제품 보기</a></p>
+      </div>`;
+    const section = document.getElementById("related-section");
+    if (section) section.hidden = true;
+    return;
+  }
+
+  const brand = getBrand(p.brandSlug);
+  document.title = `${p.name} — ${brand ? brand.name : ""} | ${SITE.name}`;
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) metaDesc.setAttribute("content", p.description.slice(0, 150));
+
+  /* 목록 카드에서 보던 색과 같은 색으로 열려야 한다 */
+  let current = coverColorway(p);
+
+  /* ---------- 필요 볼 수 (참고값) ----------
+     완성품별 대략적인 소요 실 길이를 볼 수로 환산한다. */
+  const NEEDS = [
+    { name: "목도리", meters: 400 },
+    { name: "비니", meters: 200 },
+    { name: "성인 스웨터", meters: 1200 },
+  ];
+
+  function ballHint() {
+    const items = NEEDS.map(
+      (n) => `${n.name} 약 ${Math.ceil(n.meters / p.lengthMeter)}볼`
+    ).join(" · ");
+    return `
+      <div class="usage-hint">
+        <strong>얼마나 필요할까요?</strong>
+        ${esc(items)}
+        <br>1볼 ${p.lengthMeter}m 기준으로 계산한 참고값입니다. 게이지와 사이즈에 따라 달라집니다.
+      </div>`;
+  }
+
+  /* ---------- 스펙 표 ---------- */
+  function specTable() {
+    const rows = [
+      ["소재", fiberText(p.fiber)],
+      ["중량 / 실 길이", `${p.weightGram}g / ${p.lengthMeter}m (1볼)`],
+      ["굵기", `${weightLabel(p.yarnWeight)} (${p.yarnWeight})`],
+      ["권장 게이지", p.gauge],
+      ["권장 대바늘", p.needleSize],
+      ["권장 코바늘", p.hookSize || "—"],
+      ["세탁 방법", p.careInstructions],
+      ["원산지", p.origin],
+    ];
+    return `
+      <table class="spec-table">
+        <caption>제품 사양</caption>
+        <tbody>
+          ${rows
+            .map(([k, v]) => `<tr><th scope="row">${esc(k)}</th><td>${esc(v)}</td></tr>`)
+            .join("")}
+        </tbody>
+      </table>`;
+  }
+
+  /* ---------- 렌더 ---------- */
+  function render() {
+    root.innerHTML = `
+      <div class="detail-media">
+        ${skeinFrame(current.hex, `${p.name} ${current.name} 실타래`, {
+          large: true,
+          badge: stockBadge(p.stock),
+        })}
+        <p class="swatch-note">
+          화면 색과 실물 색은 차이가 있을 수 있습니다. 실물 스와치 사진은 준비 중입니다.
+        </p>
+      </div>
+
+      <div class="detail-info">
+        <nav class="breadcrumb" aria-label="위치">
+          <a href="${href("products")}">제품</a><span>/</span>
+          <a href="${href("brands", "b=" + encodeURIComponent(p.brandSlug))}">${esc(brand ? brand.name : "")}</a><span>/</span>
+          ${esc(p.name)}
+        </nav>
+
+        <p class="detail-brand">${esc(brand ? brand.name : "")} · ${esc(brand ? brand.country : "")}</p>
+        <h1 class="detail-title">${esc(p.name)}</h1>
+        <p class="detail-desc">${esc(p.description)}</p>
+
+        <p class="detail-price">
+          ${won(p.retailPrice)}
+          <small>1볼 ${p.weightGram}g 기준</small>
+        </p>
+
+        <div class="colorway-block">
+          <div class="colorway-head">
+            <span class="colorway-label">색상 ${p.colorways.length}종</span>
+            <span class="colorway-current" id="cw-current"></span>
+          </div>
+          <div class="colorway-grid" id="cw-grid"></div>
+        </div>
+
+        <div class="buy-block">${buyBlock(p)}</div>
+
+        ${ballHint()}
+        ${specTable()}
+      </div>`;
+
+    renderColorways();
+  }
+
+  function renderColorways() {
+    const grid = document.getElementById("cw-grid");
+    const label = document.getElementById("cw-current");
+
+    grid.innerHTML = p.colorways
+      .map(
+        (c) => `
+        <button class="cw"
+                style="--c:${esc(c.hex)}"
+                data-code="${esc(c.code)}"
+                data-stock="${esc(c.stock)}"
+                aria-pressed="${c.code === current.code}"
+                title="${esc(c.name)} (${esc(c.code)})">
+          <span class="sr-only">${esc(c.name)}</span>
+        </button>`
+      )
+      .join("");
+
+    label.textContent =
+      `${current.name} · ${current.code}` +
+      (current.stock === "sold_out" ? " (품절)" : "");
+
+    grid.querySelectorAll(".cw").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        current = p.colorways.find((c) => c.code === btn.dataset.code);
+        /* 실타래 색만 바꾸면 되므로 전체를 다시 그리지 않는다 */
+        const skein = root.querySelector(".detail-media .skein");
+        if (skein) {
+          skein.style.setProperty("--c", current.hex);
+          skein.setAttribute("aria-label", `${p.name} ${current.name} 실타래`);
+        }
+        renderColorways();
+      });
+    });
+  }
+
+  render();
+
+  /* ---------- 같은 브랜드의 다른 실 ---------- */
+  const related = document.getElementById("related-grid");
+  const section = document.getElementById("related-section");
+  if (related) {
+    const list = PRODUCTS.filter((x) => x.brandSlug === p.brandSlug && x.slug !== p.slug);
+    related.innerHTML = list.map(productCard).join("");
+    if (section) section.hidden = list.length === 0;
+    const head = document.getElementById("related-title");
+    if (head) head.textContent = `${brand ? brand.name : ""}의 다른 실`;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", initProductDetail);
+
+/* 브랜드 목록 */
+
+function initBrands() {
+  const list = document.getElementById("brand-list");
+  if (!list) return;
+
+  list.innerHTML = BRANDS.map((b) => {
+    const count = PRODUCTS.filter((p) => p.brandSlug === b.slug).length;
+    return `
+      <article class="brand-row" id="${esc(b.slug)}">
+        <div>
+          <h2 class="br-name">${esc(b.name)}</h2>
+          <p class="br-country">${esc(b.country)} · ${count}종 취급</p>
+        </div>
+        <p class="br-story">${esc(b.story)}</p>
+        <a class="btn btn--ghost" href="${href("products", "brand=" + encodeURIComponent(b.slug))}">
+          ${esc(b.name)} 제품 보기
+        </a>
+      </article>`;
+  }).join("");
+
+  /* ?b=브랜드슬러그 또는 #브랜드슬러그 로 들어오면 해당 위치로 */
+  const anchor =
+    urlParams().get("b") ||
+    (!window.PREVIEW_MODE && location.hash ? location.hash.slice(1) : "");
+
+  if (anchor) {
+    const target = document.getElementById(anchor);
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+
+document.addEventListener("DOMContentLoaded", initBrands);
+
+/* 문의 페이지 — 탭 전환 및 폼 처리 */
+
+function initContact() {
+  /* 연락처 정보는 data.js 한 곳에서 관리 */
+  const emailEl = document.querySelector("[data-site-email]");
+  if (emailEl) {
+    emailEl.innerHTML = `<a class="link-more" href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a>`;
+  }
+
+  const hoursEl = document.querySelector("[data-site-hours]");
+  if (hoursEl) hoursEl.textContent = SITE.hours;
+
+  /* 도매 문의의 관심 브랜드 목록 */
+  const brandSelect = document.querySelector("[data-brand-options]");
+  if (brandSelect && !brandSelect.dataset.filled) {
+    brandSelect.dataset.filled = "1";
+    brandSelect.insertAdjacentHTML(
+      "beforeend",
+      BRANDS.map((b) => `<option value="${esc(b.slug)}">${esc(b.name)}</option>`).join("")
+    );
+  }
+
+  /* ---------- 탭 ---------- */
+  const tabs = [
+    { tab: document.getElementById("tab-general"), panel: document.getElementById("panel-general") },
+    { tab: document.getElementById("tab-wholesale"), panel: document.getElementById("panel-wholesale") },
+  ].filter((t) => t.tab && t.panel);
+
+  if (!tabs.length) return;
+
+  function select(index) {
+    tabs.forEach((t, i) => {
+      t.tab.setAttribute("aria-selected", String(i === index));
+      t.panel.hidden = i !== index;
+    });
+  }
+
+  tabs.forEach((t, i) => t.tab.addEventListener("click", () => select(i)));
+
+  /* ?type=wholesale 로 들어오면 도매 탭부터 */
+  select(urlParams().get("type") === "wholesale" ? 1 : 0);
+
+  /* ---------- 폼 제출 ----------
+     아직 백엔드가 없다. 연동 전까지는 안내만 띄운다. */
+  document.querySelectorAll("[data-contact-form]").forEach((form) => {
+    if (form.dataset.bound) return;
+    form.dataset.bound = "1";
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const notice = form.querySelector(".notice");
+      if (notice) {
+        notice.textContent =
+          "문의 폼은 아직 연동 전입니다. 메일 발송 연동(Formspree·Resend 등)이 필요합니다. " +
+          "당장은 " + SITE.email + " 으로 보내주세요.";
+        notice.setAttribute("data-show", "true");
+      }
+    });
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initContact);
+
+</script>
+
+<script>
+/* ---------- 해시 라우터 ---------- */
+const TEMPLATES = {"home":"<!-- 히어로 -->\n    <section class=\"hero\">\n      <div class=\"wrap hero-inner\">\n        <div>\n          <h1>손으로 만져보고<br>떠본 실만 들여옵니다</h1>\n          <p>\n            노르웨이의 양모, 이탈리아의 캐시미어 블렌드, 프랑스의 모헤어, 페루의 알파카.\n            marie yarn은 방적소를 직접 찾아가 고른 실을 국내에 유통합니다.\n          </p>\n          <div class=\"hero-actions\">\n            <a class=\"btn btn--primary btn--lg\" href=\"#products\">제품 보기</a>\n            <a class=\"btn btn--naver btn--lg\" data-naver-store href=\"#\" target=\"_blank\" rel=\"noopener\">네이버 스토어에서 구매</a>\n          </div>\n        </div>\n        <div class=\"hero-art\" id=\"hero-art\" aria-hidden=\"true\"></div>\n      </div>\n    </section>\n\n    <!-- 취급 브랜드 -->\n    <section class=\"section section--tight\">\n      <div class=\"wrap\">\n        <div class=\"section-head\">\n          <div>\n            <p class=\"eyebrow\">Brands</p>\n            <h2 class=\"section-title\">취급 브랜드</h2>\n          </div>\n          <a class=\"link-more\" href=\"#brands\">브랜드 전체 보기</a>\n        </div>\n        <div class=\"brand-strip\" id=\"brand-strip\"></div>\n      </div>\n    </section>\n\n    <!-- 추천 실 -->\n    <section class=\"section\">\n      <div class=\"wrap\">\n        <div class=\"section-head\">\n          <div>\n            <p class=\"eyebrow\">Featured</p>\n            <h2 class=\"section-title\">이번 시즌 추천 실</h2>\n            <p class=\"section-desc\">처음 만나는 브랜드라면 이 실부터 떠보시길 권합니다.</p>\n          </div>\n          <a class=\"link-more\" href=\"#products\">전체 제품 보기</a>\n        </div>\n        <div class=\"product-grid\" id=\"featured-products\"></div>\n      </div>\n    </section>\n\n    <!-- 색으로 고르기 -->\n    <section class=\"section section--alt\">\n      <div class=\"wrap\">\n        <div class=\"section-head\">\n          <div>\n            <p class=\"eyebrow\">Colors</p>\n            <h2 class=\"section-title\">색으로 고르기</h2>\n            <p class=\"section-desc\">\n              떠올린 색이 있다면 색 계열부터 좁혀보세요. 같은 계열끼리는 브랜드가 달라도 잘 어울립니다.\n            </p>\n          </div>\n        </div>\n        <div class=\"family-grid\" id=\"family-grid\"></div>\n      </div>\n    </section>\n\n    <!-- 우리가 하는 일 -->\n    <section class=\"section\">\n      <div class=\"wrap\">\n        <div class=\"section-head\">\n          <div>\n            <p class=\"eyebrow\">Why marie yarn</p>\n            <h2 class=\"section-title\">수입사가 하는 일</h2>\n          </div>\n        </div>\n        <div class=\"value-grid\">\n          <div class=\"value-item\">\n            <p class=\"value-num\">01</p>\n            <h3>방적소와 직접 거래합니다</h3>\n            <p>\n              중간 유통 단계를 거치지 않고 방적소와 직접 계약합니다.\n              그래서 배치별 염색 편차나 재입고 일정을 정확히 안내드릴 수 있습니다.\n            </p>\n          </div>\n          <div class=\"value-item\">\n            <p class=\"value-num\">02</p>\n            <h3>들여오기 전에 떠봅니다</h3>\n            <p>\n              모든 실은 수입 결정 전에 직접 스와치를 뜹니다.\n              라벨의 게이지와 실제로 떠본 게이지가 다르면 그대로 안내합니다.\n            </p>\n          </div>\n          <div class=\"value-item\">\n            <p class=\"value-num\">03</p>\n            <h3>스펙을 숨기지 않습니다</h3>\n            <p>\n              소재 구성, 실 길이, 권장 게이지, 세탁 방법을 제품 페이지에 전부 공개합니다.\n              사고 나서 알게 되는 정보가 없어야 한다고 생각합니다.\n            </p>\n          </div>\n        </div>\n      </div>\n    </section>\n\n    <!-- 가이드 유도 -->\n    <section class=\"section section--tight section--alt\">\n      <div class=\"wrap\">\n        <div class=\"section-head\">\n          <div>\n            <p class=\"eyebrow\">Guide</p>\n            <h2 class=\"section-title\">어떤 실을 골라야 할지 모르겠다면</h2>\n            <p class=\"section-desc\">\n              DK와 워스티드의 차이, 게이지 읽는 법, 소재별 특징을 한 페이지에 정리했습니다.\n            </p>\n          </div>\n          <a class=\"link-more\" href=\"#guide\">실 고르기 가이드</a>\n        </div>\n      </div>\n    </section>\n\n    <!-- 입고 알림 -->\n    <section class=\"section\" id=\"subscribe\">\n      <div class=\"wrap\">\n        <div class=\"subscribe\">\n          <h2>새로 들어온 실을 가장 먼저</h2>\n          <p>입고 일정과 신규 컬러웨이 소식을 이메일로 보내드립니다. 광고 메일은 보내지 않습니다.</p>\n          <form class=\"subscribe-form\" data-subscribe-form>\n            <label class=\"sr-only\" for=\"sub-email\">이메일 주소</label>\n            <input id=\"sub-email\" type=\"email\" name=\"email\" placeholder=\"이메일 주소\" required>\n            <button class=\"btn\" type=\"submit\">알림 받기</button>\n          </form>\n          <p class=\"form-note\">구독은 언제든 해지할 수 있습니다.</p>\n        </div>\n      </div>\n    </section>","products":"<div class=\"page-head\">\n      <div class=\"wrap\">\n        <h1>전체 제품</h1>\n        <p>\n          굵기와 소재를 먼저 정하고, 색은 그다음에 고르는 편이 실패가 적습니다.\n          어떤 기준으로 골라야 할지 모르겠다면 <a class=\"link-more\" href=\"#guide\">실 고르기 가이드</a>를 먼저 보세요.\n        </p>\n      </div>\n    </div>\n\n    <div class=\"wrap catalog-layout\">\n      <aside class=\"filters\" id=\"filters\" aria-label=\"제품 필터\"></aside>\n\n      <div>\n        <div class=\"catalog-bar\">\n          <p class=\"result-count\" id=\"result-count\" role=\"status\"></p>\n          <div style=\"display:flex; gap:10px; align-items:center\">\n            <button class=\"btn btn--ghost filter-toggle\" id=\"filter-toggle\" type=\"button\"\n                    aria-expanded=\"false\" aria-controls=\"filters\">필터</button>\n            <label class=\"sr-only\" for=\"sort\">정렬</label>\n            <select class=\"sort-select\" id=\"sort\">\n              <option value=\"new\">신상품순</option>\n              <option value=\"name\">이름순</option>\n              <option value=\"price_asc\">낮은 가격순</option>\n              <option value=\"price_desc\">높은 가격순</option>\n            </select>\n          </div>\n        </div>\n\n        <div class=\"product-grid\" id=\"catalog-grid\"></div>\n      </div>\n    </div>","product":"<div class=\"wrap detail-layout\" id=\"detail-root\"></div>\n\n    <section class=\"section section--alt\" id=\"related-section\">\n      <div class=\"wrap\">\n        <div class=\"section-head\">\n          <h2 class=\"section-title\" id=\"related-title\">같은 브랜드의 다른 실</h2>\n          <a class=\"link-more\" href=\"#products\">전체 제품 보기</a>\n        </div>\n        <div class=\"product-grid\" id=\"related-grid\"></div>\n      </div>\n    </section>\n\n    <section class=\"section\" id=\"subscribe\">\n      <div class=\"wrap\">\n        <div class=\"subscribe\">\n          <h2>입고되면 알려드릴까요?</h2>\n          <p>재입고와 신규 컬러웨이 소식을 이메일로 보내드립니다.</p>\n          <form class=\"subscribe-form\" data-subscribe-form>\n            <label class=\"sr-only\" for=\"sub-email\">이메일 주소</label>\n            <input id=\"sub-email\" type=\"email\" name=\"email\" placeholder=\"이메일 주소\" required>\n            <button class=\"btn\" type=\"submit\">알림 받기</button>\n          </form>\n          <p class=\"form-note\">구독은 언제든 해지할 수 있습니다.</p>\n        </div>\n      </div>\n    </section>","brands":"<div class=\"page-head\">\n      <div class=\"wrap\">\n        <h1>취급 브랜드</h1>\n        <p>\n          규모보다 방적 방식과 염색을 보고 고릅니다.\n          한번 계약한 브랜드는 오래 취급하는 것을 원칙으로 합니다.\n        </p>\n      </div>\n    </div>\n\n    <section class=\"section\">\n      <div class=\"wrap\">\n        <div class=\"brand-list\" id=\"brand-list\"></div>\n      </div>\n    </section>","guide":"<div class=\"page-head\">\n      <div class=\"wrap\">\n        <h1>실 고르기 가이드</h1>\n        <p>\n          실은 굵기 → 소재 → 색 순서로 고르면 실패가 적습니다.\n          색부터 정하면 원하는 옷이 안 나오는 경우가 많습니다.\n        </p>\n      </div>\n    </div>\n\n    <div class=\"wrap prose\">\n\n      <h2>1. 굵기부터 정합니다</h2>\n      <p>\n        같은 도안이라도 실 굵기가 다르면 완전히 다른 옷이 됩니다.\n        굵기 표기는 브랜드마다 조금씩 다르지만 대체로 아래 체계를 따릅니다.\n      </p>\n\n      <div class=\"table-scroll\">\n        <table class=\"data-table\">\n          <thead>\n            <tr>\n              <th scope=\"col\">굵기</th>\n              <th scope=\"col\">한글 표기</th>\n              <th scope=\"col\">권장 바늘</th>\n              <th scope=\"col\">게이지 (10cm)</th>\n              <th scope=\"col\">이런 걸 뜨기 좋습니다</th>\n            </tr>\n          </thead>\n          <tbody>\n            <tr><td>Lace</td><td>레이스</td><td>2.0 – 3.5mm</td><td>28 – 32코</td><td>숄, 합사용</td></tr>\n            <tr><td>Fingering</td><td>핑거링</td><td>2.25 – 3.25mm</td><td>28 – 32코</td><td>양말, 얇은 가디건</td></tr>\n            <tr><td>Sport</td><td>스포츠</td><td>3.0 – 3.75mm</td><td>24 – 26코</td><td>봄가을 상의, 아기 옷</td></tr>\n            <tr><td>DK</td><td>DK</td><td>3.75 – 4.5mm</td><td>21 – 24코</td><td>가장 무난한 스웨터</td></tr>\n            <tr><td>Worsted</td><td>워스티드</td><td>4.5 – 5.5mm</td><td>16 – 20코</td><td>겉옷, 두꺼운 스웨터</td></tr>\n            <tr><td>Bulky</td><td>벌키</td><td>6.0 – 9.0mm</td><td>12 – 15코</td><td>목도리, 빠르게 뜨는 겉옷</td></tr>\n            <tr><td>Jumbo</td><td>점보</td><td>10mm 이상</td><td>7코 이하</td><td>블랭킷, 쿠션</td></tr>\n          </tbody>\n        </table>\n      </div>\n\n      <h3>처음이라면 DK</h3>\n      <p>\n        너무 가늘면 진도가 안 나가고, 너무 굵으면 조직이 성겨 보입니다.\n        DK 굵기는 뜨는 속도와 완성도가 가장 균형 잡혀 있어 첫 스웨터에 적당합니다.\n      </p>\n\n      <h2>2. 소재를 정합니다</h2>\n      <p>같은 굵기라도 소재에 따라 입었을 때가 완전히 다릅니다.</p>\n\n      <div class=\"table-scroll\">\n        <table class=\"data-table\">\n          <thead>\n            <tr>\n              <th scope=\"col\">소재</th>\n              <th scope=\"col\">특징</th>\n              <th scope=\"col\">주의할 점</th>\n            </tr>\n          </thead>\n          <tbody>\n            <tr>\n              <td>메리노울</td>\n              <td>탄력이 좋아 조직이 또렷하게 살아납니다. 무늬뜨기에 적합합니다.</td>\n              <td>세탁 시 줄어들 수 있어 손세탁을 권합니다.</td>\n            </tr>\n            <tr>\n              <td>알파카</td>\n              <td>가볍고 따뜻하며 은은한 광택이 있습니다.</td>\n              <td>늘어지는 성질이 있어 긴 옷은 무게를 고려해야 합니다.</td>\n            </tr>\n            <tr>\n              <td>캐시미어</td>\n              <td>부드러움이 압도적입니다. 피부에 닿는 옷에 좋습니다.</td>\n              <td>보풀이 생기기 쉽고 가격대가 높습니다.</td>\n            </tr>\n            <tr>\n              <td>모헤어</td>\n              <td>잔털이 퍼지며 부피감을 만듭니다. 합사하면 분위기가 확 바뀝니다.</td>\n              <td>한번 뜨면 풀기 어렵습니다. 게이지를 미리 확인하세요.</td>\n            </tr>\n            <tr>\n              <td>코튼</td>\n              <td>통기성이 좋고 세탁이 편합니다. 여름 옷에 적합합니다.</td>\n              <td>탄력이 없어 늘어납니다. 손목이 아플 수 있습니다.</td>\n            </tr>\n            <tr>\n              <td>린넨</td>\n              <td>쓸수록 부드러워지고 색이 오래갑니다.</td>\n              <td>처음엔 뻣뻣합니다. 완성 후 한 번 세탁하면 달라집니다.</td>\n            </tr>\n          </tbody>\n        </table>\n      </div>\n\n      <h2>3. 게이지 읽는 법</h2>\n      <p>\n        제품 페이지의 <strong>10 × 10cm = 22코 30단</strong>은\n        \"권장 바늘로 10cm 사방을 뜨면 가로 22코, 세로 30단이 나온다\"는 뜻입니다.\n      </p>\n      <ul>\n        <li>도안의 게이지와 실의 게이지가 맞아야 도안대로 사이즈가 나옵니다.</li>\n        <li>같은 실이라도 뜨는 사람의 손 힘에 따라 게이지가 달라집니다.</li>\n        <li>옷을 뜬다면 <strong>반드시 스와치를 먼저 떠서</strong> 본인 게이지를 확인하세요.</li>\n        <li>코 수가 많으면(= 조직이 촘촘하면) 바늘을 한 호수 올려보세요.</li>\n      </ul>\n\n      <h2>4. 얼마나 사야 할까</h2>\n      <p>실 길이(m) 기준으로 계산합니다. 대략적인 소요량은 다음과 같습니다.</p>\n      <ul>\n        <li>목도리 — 약 400m</li>\n        <li>비니 — 약 200m</li>\n        <li>성인 스웨터 — 약 1,000 – 1,400m</li>\n      </ul>\n      <p>\n        각 제품 페이지에 1볼 길이를 기준으로 환산한 필요 볼 수를 표시해 두었습니다.\n        염색 배치가 달라지면 미묘한 색 차이가 생길 수 있으니,\n        <strong>한 작품에 쓸 실은 한 번에 구매하시길 권합니다.</strong>\n      </p>\n\n      <h2>5. 세탁 표기</h2>\n      <ul>\n        <li><strong>손세탁</strong> — 미지근한 물에 눌러 빨고, 비틀지 말고 눌러서 물기를 뺍니다.</li>\n        <li><strong>울코스 세탁 가능</strong> — 세탁망에 넣고 30℃ 이하 울코스로 돌립니다.</li>\n        <li><strong>뉘어서 건조</strong> — 걸어서 말리면 무게 때문에 늘어납니다. 반드시 눕혀서 말립니다.</li>\n      </ul>\n\n      <p style=\"margin-top:40px\">\n        <a class=\"btn btn--primary\" href=\"#products\">이제 실을 골라볼까요</a>\n      </p>\n    </div>","about":"<div class=\"page-head\">\n      <div class=\"wrap\">\n        <h1>손으로 만져보고 떠본 실만</h1>\n        <p>marie yarn이 실을 고르는 기준과 일하는 방식입니다.</p>\n      </div>\n    </div>\n\n    <div class=\"wrap prose\">\n      <h2>왜 수입을 시작했나</h2>\n      <p>\n        좋은 도안은 많은데 그 도안에 맞는 실을 국내에서 구하기 어려웠습니다.\n        해외 직구를 하자니 배송비가 실값을 넘고, 색은 화면으로만 봐야 했습니다.\n        \"이 실을 국내에서 편하게 살 수 있으면 좋겠다\"는 생각에서 시작했습니다.\n      </p>\n\n      <h2>실을 고르는 기준</h2>\n      <h3>방적소를 직접 봅니다</h3>\n      <p>\n        중간 유통을 거치지 않고 방적소와 직접 계약합니다.\n        그래야 염색 배치 정보, 재입고 일정, 단종 예정을 정확히 파악할 수 있습니다.\n        고객에게 \"언제 들어오는지 모릅니다\"라고 답하고 싶지 않았습니다.\n      </p>\n\n      <h3>수입 전에 직접 떠봅니다</h3>\n      <p>\n        모든 실은 계약 전에 스와치를 떠봅니다.\n        라벨에 적힌 게이지와 실제로 떠본 게이지가 다르면, 다른 대로 제품 페이지에 적습니다.\n        세탁 후 줄어드는 정도도 확인합니다.\n      </p>\n\n      <h3>오래 취급합니다</h3>\n      <p>\n        한 시즌 팔고 접는 실은 들여오지 않습니다.\n        작품을 뜨다가 실이 모자랐을 때 같은 색을 다시 구할 수 없다면,\n        그건 실을 판 쪽의 책임이라고 생각합니다.\n      </p>\n\n      <h2>스펙을 숨기지 않습니다</h2>\n      <p>\n        소재 구성 비율, 1볼 실 길이, 권장 게이지, 권장 바늘 호수, 세탁 방법, 원산지.\n        모든 제품 페이지에 이 정보를 빠짐없이 공개합니다.\n        사고 나서 알게 되는 정보가 없어야 한다는 것이 원칙입니다.\n      </p>\n      <p>\n        화면의 색과 실물 색이 다를 수 있다는 점도 그대로 적습니다.\n        색이 중요한 작업이라면 문의를 주세요. 실물 샘플을 보내드립니다.\n      </p>\n\n      <h2>뜨개방 · 공방을 운영하신다면</h2>\n      <p>\n        도매 거래를 진행합니다. 최소 주문 수량과 거래 조건은 취급 브랜드에 따라 다르므로\n        문의 페이지의 도매 문의 탭으로 연락 주세요.\n      </p>\n\n      <p style=\"margin-top:40px; display:flex; gap:10px; flex-wrap:wrap\">\n        <a class=\"btn btn--primary\" href=\"#products\">제품 보기</a>\n        <a class=\"btn btn--ghost\" href=\"#contact\">문의하기</a>\n      </p>\n    </div>","contact":"<div class=\"page-head\">\n      <div class=\"wrap\">\n        <h1>문의</h1>\n        <p>\n          주문·배송 문의는 구매하신 네이버 스토어를 통해 주시면 더 빠릅니다.\n          실 자체에 대한 질문과 도매 거래 문의는 이곳으로 보내주세요.\n        </p>\n      </div>\n    </div>\n\n    <div class=\"wrap form-layout\">\n      <div>\n        <div class=\"tabs\" role=\"tablist\">\n          <button class=\"tab\" type=\"button\" role=\"tab\" id=\"tab-general\"\n                  aria-selected=\"true\" aria-controls=\"panel-general\">일반 문의</button>\n          <button class=\"tab\" type=\"button\" role=\"tab\" id=\"tab-wholesale\"\n                  aria-selected=\"false\" aria-controls=\"panel-wholesale\">도매 · 취급 문의</button>\n        </div>\n\n        <!-- 일반 문의 -->\n        <form id=\"panel-general\" role=\"tabpanel\" aria-labelledby=\"tab-general\" data-contact-form>\n          <div class=\"field-row\">\n            <div class=\"field\">\n              <label for=\"g-name\">이름<span class=\"req\">*</span></label>\n              <input id=\"g-name\" name=\"name\" type=\"text\" required>\n            </div>\n            <div class=\"field\">\n              <label for=\"g-email\">이메일<span class=\"req\">*</span></label>\n              <input id=\"g-email\" name=\"email\" type=\"email\" required>\n            </div>\n          </div>\n\n          <div class=\"field\">\n            <label for=\"g-type\">문의 유형</label>\n            <select id=\"g-type\" name=\"type\">\n              <option>실 스펙 · 게이지 문의</option>\n              <option>색상 · 실물 샘플 문의</option>\n              <option>재입고 문의</option>\n              <option>기타</option>\n            </select>\n          </div>\n\n          <div class=\"field\">\n            <label for=\"g-message\">문의 내용<span class=\"req\">*</span></label>\n            <textarea id=\"g-message\" name=\"message\" required\n              placeholder=\"어떤 실의 어떤 점이 궁금하신지 적어주세요. 뜨려는 작품을 함께 알려주시면 더 정확히 답변드릴 수 있습니다.\"></textarea>\n          </div>\n\n          <label class=\"consent\">\n            <input type=\"checkbox\" required>\n            <span>\n              문의 답변을 위한 개인정보(이름, 이메일) 수집·이용에 동의합니다.\n              자세한 내용은 <a href=\"#privacy\">개인정보처리방침</a>을 확인해 주세요.\n            </span>\n          </label>\n\n          <button class=\"btn btn--primary btn--lg\" type=\"submit\">문의 보내기</button>\n          <p class=\"notice notice--warn\"></p>\n        </form>\n\n        <!-- 도매 문의 -->\n        <form id=\"panel-wholesale\" role=\"tabpanel\" aria-labelledby=\"tab-wholesale\" data-contact-form hidden>\n          <div class=\"field-row\">\n            <div class=\"field\">\n              <label for=\"w-company\">상호<span class=\"req\">*</span></label>\n              <input id=\"w-company\" name=\"company\" type=\"text\" required>\n            </div>\n            <div class=\"field\">\n              <label for=\"w-regno\">사업자등록번호<span class=\"req\">*</span></label>\n              <input id=\"w-regno\" name=\"regno\" type=\"text\" placeholder=\"000-00-00000\" required>\n            </div>\n          </div>\n\n          <div class=\"field-row\">\n            <div class=\"field\">\n              <label for=\"w-name\">담당자<span class=\"req\">*</span></label>\n              <input id=\"w-name\" name=\"name\" type=\"text\" required>\n            </div>\n            <div class=\"field\">\n              <label for=\"w-phone\">연락처<span class=\"req\">*</span></label>\n              <input id=\"w-phone\" name=\"phone\" type=\"tel\" required>\n            </div>\n          </div>\n\n          <div class=\"field\">\n            <label for=\"w-email\">이메일<span class=\"req\">*</span></label>\n            <input id=\"w-email\" name=\"email\" type=\"email\" required>\n          </div>\n\n          <div class=\"field\">\n            <label for=\"w-brand\">관심 브랜드</label>\n            <select id=\"w-brand\" name=\"brand\" data-brand-options>\n              <option value=\"\">전체</option>\n            </select>\n          </div>\n\n          <div class=\"field\">\n            <label for=\"w-message\">문의 내용<span class=\"req\">*</span></label>\n            <textarea id=\"w-message\" name=\"message\" required\n              placeholder=\"예상 발주 수량, 매장 위치, 희망 입고 시기 등을 적어주시면 조건 안내가 빠릅니다.\"></textarea>\n          </div>\n\n          <label class=\"consent\">\n            <input type=\"checkbox\" required>\n            <span>\n              거래 상담을 위한 개인정보 수집·이용에 동의합니다.\n              자세한 내용은 <a href=\"#privacy\">개인정보처리방침</a>을 확인해 주세요.\n            </span>\n          </label>\n\n          <button class=\"btn btn--primary btn--lg\" type=\"submit\">도매 문의 보내기</button>\n          <p class=\"notice notice--warn\"></p>\n        </form>\n      </div>\n\n      <aside class=\"side-card\">\n        <h3>다른 방법으로 연락하기</h3>\n        <dl>\n          <dt>이메일</dt>\n          <dd data-site-email></dd>\n          <dt>운영 시간</dt>\n          <dd data-site-hours></dd>\n          <dt>주문 · 배송</dt>\n          <dd><a class=\"link-more\" data-naver-store href=\"#\" target=\"_blank\" rel=\"noopener\">네이버 스토어 문의하기</a></dd>\n          <dt>인스타그램</dt>\n          <dd><a class=\"link-more\" data-instagram href=\"#\" target=\"_blank\" rel=\"noopener\">@marieyarn</a></dd>\n        </dl>\n      </aside>\n    </div>","faq":"<div class=\"page-head\">\n      <div class=\"wrap\">\n        <h1>자주 묻는 질문</h1>\n        <p>여기에 없는 내용은 <a class=\"link-more\" href=\"#contact\">문의 페이지</a>로 보내주세요.</p>\n      </div>\n    </div>\n\n    <div class=\"wrap prose\">\n      <h2>구매</h2>\n\n      <h3>이 사이트에서 바로 살 수 있나요?</h3>\n      <p>\n        결제는 네이버 스마트스토어에서 진행됩니다.\n        제품 페이지의 <strong>네이버 스토어에서 구매</strong> 버튼을 누르면 해당 상품 페이지로 이동합니다.\n        네이버페이 포인트와 적립도 그대로 적용됩니다.\n      </p>\n\n      <h3>가격이 스토어와 다른데요?</h3>\n      <p>\n        이 사이트의 가격은 정가 기준입니다.\n        네이버 스토어에서 진행 중인 할인이나 쿠폰이 있으면 실제 결제 금액은 더 낮을 수 있습니다.\n        최종 금액은 스토어 페이지를 확인해 주세요.\n      </p>\n\n      <h2>배송 · 교환</h2>\n\n      <h3>배송은 얼마나 걸리나요?</h3>\n      <p>\n        네이버 스토어 기준으로 안내됩니다. 주문·배송·교환·반품 문의는\n        구매하신 스토어의 문의하기를 이용하시면 가장 빠릅니다.\n      </p>\n\n      <h3>실을 뜯었는데 교환할 수 있나요?</h3>\n      <p>\n        라벨을 제거했거나 감긴 실을 푼 경우에는 교환·반품이 어렵습니다.\n        색이나 굵기가 걱정되신다면 구매 전에 문의를 주세요. 실물 샘플을 보내드립니다.\n      </p>\n\n      <h2>제품</h2>\n\n      <h3>화면 색과 실물 색이 같나요?</h3>\n      <p>\n        다를 수 있습니다. 모니터와 기기에 따라 색 표현이 달라지고,\n        염색 배치에 따라 같은 색상 코드라도 미세한 차이가 생깁니다.\n        색이 중요한 작업이라면 실물 샘플을 요청해 주세요.\n      </p>\n\n      <h3>한 작품에 쓸 실은 어떻게 사야 하나요?</h3>\n      <p>\n        <strong>한 번에, 같은 배치로 구매하시길 권합니다.</strong>\n        나중에 추가로 사면 염색 배치가 달라져 색이 미묘하게 어긋날 수 있습니다.\n        필요한 볼 수는 각 제품 페이지에 참고값으로 표시해 두었습니다.\n      </p>\n\n      <h3>품절된 색은 언제 다시 들어오나요?</h3>\n      <p>\n        수입 일정에 따라 다르지만 보통 2~3개월 주기입니다.\n        입고 알림을 신청해 두시면 재입고 시 이메일로 가장 먼저 알려드립니다.\n      </p>\n\n      <h2>도매 거래</h2>\n\n      <h3>뜨개방을 운영하는데 도매 거래가 가능한가요?</h3>\n      <p>\n        가능합니다. 사업자등록증을 보유한 매장·공방을 대상으로 진행합니다.\n        최소 주문 수량과 거래 조건은 브랜드마다 다르므로\n        <a class=\"link-more\" href=\"#contact?type=wholesale\">도매 문의</a>로 연락 주세요.\n      </p>\n\n      <h3>온라인 판매도 가능한가요?</h3>\n      <p>\n        브랜드별로 온라인 재판매 정책이 다릅니다. 문의 시 판매 채널을 함께 알려주시면\n        가능 여부를 확인해 안내드리겠습니다.\n      </p>\n    </div>","privacy":"<div class=\"page-head\">\n      <div class=\"wrap\">\n        <h1>개인정보처리방침</h1>\n        <p>marie yarn은 이용자의 개인정보를 소중히 다룹니다.</p>\n      </div>\n    </div>\n\n    <div class=\"wrap prose\">\n      <div class=\"usage-hint\" style=\"margin-bottom:40px\">\n        <strong>⚠️ 오픈 전 반드시 완성해야 하는 페이지입니다</strong>\n        아래는 항목 구조만 잡아둔 초안입니다. 문의 폼과 구독 폼에서 개인정보를 수집하는 이상\n        이 방침은 사이트 공개 전에 실제 내용으로 채워져야 합니다.\n        보유 기간, 수탁업체, 개인정보 보호책임자는 실제 운영 방식에 맞춰 작성해야 하며,\n        확정 전 법무 검토를 권합니다.\n      </div>\n\n      <h2>1. 수집하는 개인정보 항목</h2>\n      <ul>\n        <li>문의 시 — 이름, 이메일 주소, 문의 내용</li>\n        <li>도매 문의 시 — 상호, 사업자등록번호, 담당자명, 연락처, 이메일</li>\n        <li>입고 알림 신청 시 — 이메일 주소</li>\n        <li>자동 수집 — 접속 IP, 브라우저 정보, 방문 기록 (웹 분석 도구 사용 시)</li>\n      </ul>\n\n      <h2>2. 개인정보의 수집·이용 목적</h2>\n      <ul>\n        <li>문의에 대한 답변 및 상담</li>\n        <li>도매 거래 조건 안내 및 상담</li>\n        <li>재입고 및 신규 상품 정보 발송 (동의한 경우에 한함)</li>\n        <li>서비스 개선을 위한 통계 분석</li>\n      </ul>\n\n      <h2>3. 보유 및 이용 기간</h2>\n      <p>\n        수집 목적이 달성되면 지체 없이 파기합니다.\n        다만 관계 법령에 따라 보존이 필요한 경우 해당 기간 동안 보관합니다.\n      </p>\n      <ul>\n        <li>문의 기록 — 답변 완료 후 O년</li>\n        <li>구독 정보 — 구독 해지 시까지</li>\n      </ul>\n\n      <h2>4. 개인정보의 제3자 제공</h2>\n      <p>\n        이용자의 동의 없이 개인정보를 제3자에게 제공하지 않습니다.\n        다만 법령에 따라 요구되는 경우는 예외로 합니다.\n      </p>\n\n      <h2>5. 개인정보 처리의 위탁</h2>\n      <p>\n        서비스 운영을 위해 아래 업체에 개인정보 처리를 위탁하고 있습니다.\n        (실제 사용하는 메일 발송 서비스, 호스팅 업체 등을 기재해야 합니다.)\n      </p>\n\n      <h2>6. 이용자의 권리</h2>\n      <p>\n        이용자는 언제든지 자신의 개인정보에 대한 열람, 정정, 삭제, 처리 정지를 요청할 수 있습니다.\n        요청은 아래 연락처로 보내주시면 지체 없이 처리하겠습니다.\n      </p>\n\n      <h2>7. 개인정보 보호책임자</h2>\n      <ul>\n        <li>성명 — OOO</li>\n        <li>이메일 — <span data-privacy-email></span></li>\n      </ul>\n\n      <h2>8. 방침의 변경</h2>\n      <p>\n        이 개인정보처리방침은 시행일로부터 적용되며,\n        변경 사항이 있을 경우 시행 7일 전부터 공지사항을 통해 안내합니다.\n      </p>\n      <p>시행일 — 0000년 00월 00일</p>\n    </div>"};
+const TITLES = {"home":"marie yarn — 해외 뜨개실 수입 · 유통","products":"전체 제품 — marie yarn","product":"제품 상세 — marie yarn","brands":"취급 브랜드 — marie yarn","guide":"실 고르기 가이드 — marie yarn","about":"회사 소개 — marie yarn","contact":"문의 — marie yarn","faq":"자주 묻는 질문 — marie yarn","privacy":"개인정보처리방침 — marie yarn"};
+const INITS = {"home":"initHome","products":"initCatalog","product":"initProductDetail","brands":"initBrands","contact":"initContact","privacy":"initPrivacy"};
+
+/* privacy.html 안에 있던 인라인 스크립트를 여기로 옮겨 담는다 */
+function initPrivacy() {
+  const el = document.querySelector("[data-privacy-email]");
+  if (el) el.textContent = SITE.email;
+}
+
+function currentRoute() {
+  const raw = location.hash.replace(/^#/, "");
+  const name = raw.split("?")[0];
+  return TEMPLATES[name] ? name : "home";
+}
+
+function renderRoute() {
+  const name = currentRoute();
+  const main = document.getElementById("main");
+
+  main.innerHTML = TEMPLATES[name];
+  document.title = TITLES[name];
+
+  /* 네비게이션 현재 위치 표시 */
+  document.querySelectorAll("#nav a").forEach((a) => {
+    const target = (a.getAttribute("href") || "").replace(/^#/, "").split("?")[0];
+    if (target === name) a.setAttribute("aria-current", "page");
+    else a.removeAttribute("aria-current");
+  });
+
+  /* 모바일 메뉴가 열려 있으면 닫는다 */
+  const nav = document.getElementById("nav");
+  if (nav) nav.setAttribute("data-open", "false");
+
+  window.scrollTo(0, 0);
+
+  initCommon(main);
+  const fn = INITS[name];
+  if (fn && typeof window[fn] === "function") window[fn]();
+}
+
+window.addEventListener("hashchange", renderRoute);
+renderRoute();
+</script>

@@ -1,6 +1,11 @@
 /* =========================================================
    marie yarn — 공통 스크립트
    모든 페이지에서 data.js 다음에 로드된다.
+
+   각 페이지 스크립트는 initXxx() 함수를 노출한다.
+   멀티 페이지에서는 DOMContentLoaded 때 한 번 실행되고,
+   단일 파일 미리보기(tools/build-preview.js)에서는 화면을 바꿀 때마다
+   라우터가 다시 호출한다.
    ========================================================= */
 
 /* ---------- 유틸 ---------- */
@@ -30,6 +35,26 @@ function fiberText(fiber) {
 
 function weightLabel(w) {
   return WEIGHT_LABELS[w] || w;
+}
+
+/* ---------- 주소 쿼리 ----------
+   멀티 페이지에서는 ?slug=... , 미리보기에서는 #product?slug=... 로 들어온다.
+   양쪽 모두에서 같은 코드가 동작하도록 여기서 흡수한다. */
+
+function urlParams() {
+  const hash = location.hash;
+  const q = hash.indexOf("?");
+  if (q !== -1) return new URLSearchParams(hash.slice(q + 1));
+  return new URLSearchParams(location.search);
+}
+
+function setUrlQuery(qs) {
+  if (window.PREVIEW_MODE) {
+    const base = (location.hash.split("?")[0] || "#home");
+    history.replaceState(null, "", qs ? `${base}?${qs}` : base);
+  } else {
+    history.replaceState(null, "", qs ? `?${qs}` : location.pathname);
+  }
 }
 
 /* ---------- 네이버 스토어 연결 ----------
@@ -86,12 +111,19 @@ function chipsMarkup(colorways, max = 8) {
   }</div>`;
 }
 
+/* ---------- 링크 ----------
+   미리보기에서는 페이지 이동이 해시로 바뀐다. */
+function href(page, query) {
+  const qs = query ? `?${query}` : "";
+  return window.PREVIEW_MODE ? `#${page}${qs}` : `${page}.html${qs}`;
+}
+
 /* ---------- 제품 카드 ---------- */
 function productCard(p) {
   const brand = getBrand(p.brandSlug);
   const cover = coverColorway(p);
   return `
-    <a class="product-card" href="product.html?slug=${encodeURIComponent(p.slug)}">
+    <a class="product-card" href="${href("product", "slug=" + encodeURIComponent(p.slug))}">
       ${skeinFrame(cover.hex, `${p.name} 실타래`, { badge: stockBadge(p.stock) })}
       <p class="card-brand">${esc(brand ? brand.name : "")}</p>
       <h3 class="card-name">${esc(p.name)}</h3>
@@ -112,7 +144,7 @@ function buyBlock(p) {
       <a class="btn btn--naver btn--lg btn--block" href="${url}" target="_blank" rel="noopener">
         네이버 스토어에서 구매
       </a>
-      <a class="btn btn--ghost btn--block" href="contact.html">이 실 문의하기</a>
+      <a class="btn btn--ghost btn--block" href="${href("contact")}">이 실 문의하기</a>
       <p class="buy-note">결제는 네이버 스마트스토어에서 진행됩니다. 새 창으로 열립니다.</p>`;
   }
   if (p.stock === "incoming") {
@@ -125,35 +157,30 @@ function buyBlock(p) {
   }
   return `
     <span class="btn btn--lg btn--block btn--disabled">품절</span>
-    <a class="btn btn--ghost btn--block" href="contact.html">재입고 문의하기</a>`;
+    <a class="btn btn--ghost btn--block" href="${href("contact")}">재입고 문의하기</a>`;
 }
 
-/* ---------- 페이지 초기화 ---------- */
-document.addEventListener("DOMContentLoaded", () => {
-  /* 모바일 네비게이션 */
-  const toggle = document.querySelector(".nav-toggle");
-  const nav = document.getElementById("nav");
-  if (toggle && nav) {
-    toggle.addEventListener("click", () => {
-      const open = nav.getAttribute("data-open") === "true";
-      nav.setAttribute("data-open", String(!open));
-      toggle.setAttribute("aria-expanded", String(!open));
-    });
-  }
+/* =========================================================
+   공통 초기화
+   화면이 바뀔 때마다 다시 불려도 안전해야 한다.
+   ========================================================= */
 
-  /* 네이버 스토어 링크는 SITE 한 곳에서 관리 */
-  document.querySelectorAll("[data-naver-store]").forEach((el) => {
+function initCommon(scope) {
+  scope = scope || document;
+
+  /* 네이버 스토어 · 인스타그램 링크는 SITE 한 곳에서 관리 */
+  scope.querySelectorAll("[data-naver-store]").forEach((el) => {
     el.setAttribute("href", SITE.naverStoreUrl);
   });
-
-  document.querySelectorAll("[data-instagram]").forEach((el) => {
+  scope.querySelectorAll("[data-instagram]").forEach((el) => {
     el.setAttribute("href", SITE.instagram);
   });
 
   /* 사업자정보 — 값이 바뀌면 data.js 만 고치면 된다 */
   const biz = document.querySelector("[data-biz]");
-  if (biz) {
+  if (biz && !biz.dataset.filled) {
     const b = SITE.business;
+    biz.dataset.filled = "1";
     biz.innerHTML = `
       <div class="biz-row">
         <span>상호 ${esc(b.company)}</span>
@@ -168,7 +195,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* 구독 폼 — 아직 백엔드가 없다 */
-  document.querySelectorAll("[data-subscribe-form]").forEach((form) => {
+  scope.querySelectorAll("[data-subscribe-form]").forEach((form) => {
+    if (form.dataset.bound) return;
+    form.dataset.bound = "1";
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const note = form.parentElement.querySelector(".form-note");
@@ -178,6 +207,19 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+}
+
+/* 한 번만 걸면 되는 이벤트 */
+function bindGlobalHandlers() {
+  const toggle = document.querySelector(".nav-toggle");
+  const nav = document.getElementById("nav");
+  if (toggle && nav) {
+    toggle.addEventListener("click", () => {
+      const open = nav.getAttribute("data-open") === "true";
+      nav.setAttribute("data-open", String(!open));
+      toggle.setAttribute("aria-expanded", String(!open));
+    });
+  }
 
   /* 상세 페이지의 '입고 알림 받기' → 하단 구독 폼으로 */
   document.addEventListener("click", (e) => {
@@ -190,4 +232,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (input) setTimeout(() => input.focus(), 400);
     }
   });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  bindGlobalHandlers();
+  initCommon(document);
 });
