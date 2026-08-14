@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>문의 — marie yarn</title>
+  <meta name="description" content="marie yarn 제품 문의와 도매·취급 문의를 받습니다. 뜨개방·공방 도매 거래도 가능합니다.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="logo" href="index.html">marie <em>yarn</em></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav">메뉴</button>
+      <nav class="nav" id="nav">
+        <a href="products.html">제품</a>
+        <a href="brands.html">브랜드</a>
+        <a href="guide.html">실 고르기</a>
+        <a href="about.html">소개</a>
+        <a href="contact.html" aria-current="page">문의</a>
+      </nav>
+      <a class="btn btn--naver header-cta" data-naver-store href="#" target="_blank" rel="noopener">네이버 스토어</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="page-head">
+      <div class="wrap">
+        <h1>문의</h1>
+        <p>
+          주문·배송 문의는 구매하신 네이버 스토어를 통해 주시면 더 빠릅니다.
+          실 자체에 대한 질문과 도매 거래 문의는 이곳으로 보내주세요.
+        </p>
+      </div>
+    </div>
+
+    <div class="wrap form-layout">
+      <div>
+        <div class="tabs" role="tablist">
+          <button class="tab" type="button" role="tab" id="tab-general"
+                  aria-selected="true" aria-controls="panel-general">일반 문의</button>
+          <button class="tab" type="button" role="tab" id="tab-wholesale"
+                  aria-selected="false" aria-controls="panel-wholesale">도매 · 취급 문의</button>
+        </div>
+
+        <!-- 일반 문의 -->
+        <form id="panel-general" role="tabpanel" aria-labelledby="tab-general" data-contact-form>
+          <div class="field-row">
+            <div class="field">
+              <label for="g-name">이름<span class="req">*</span></label>
+              <input id="g-name" name="name" type="text" required>
+            </div>
+            <div class="field">
+              <label for="g-email">이메일<span class="req">*</span></label>
+              <input id="g-email" name="email" type="email" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="g-type">문의 유형</label>
+            <select id="g-type" name="type">
+              <option>실 스펙 · 게이지 문의</option>
+              <option>색상 · 실물 샘플 문의</option>
+              <option>재입고 문의</option>
+              <option>기타</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="g-message">문의 내용<span class="req">*</span></label>
+            <textarea id="g-message" name="message" required
+              placeholder="어떤 실의 어떤 점이 궁금하신지 적어주세요. 뜨려는 작품을 함께 알려주시면 더 정확히 답변드릴 수 있습니다."></textarea>
+          </div>
+
+          <label class="consent">
+            <input type="checkbox" required>
+            <span>
+              문의 답변을 위한 개인정보(이름, 이메일) 수집·이용에 동의합니다.
+              자세한 내용은 <a href="privacy.html">개인정보처리방침</a>을 확인해 주세요.
+            </span>
+          </label>
+
+          <button class="btn btn--primary btn--lg" type="submit">문의 보내기</button>
+          <p class="notice notice--warn"></p>
+        </form>
+
+        <!-- 도매 문의 -->
+        <form id="panel-wholesale" role="tabpanel" aria-labelledby="tab-wholesale" data-contact-form hidden>
+          <div class="field-row">
+            <div class="field">
+              <label for="w-company">상호<span class="req">*</span></label>
+              <input id="w-company" name="company" type="text" required>
+            </div>
+            <div class="field">
+              <label for="w-regno">사업자등록번호<span class="req">*</span></label>
+              <input id="w-regno" name="regno" type="text" placeholder="000-00-00000" required>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="w-name">담당자<span class="req">*</span></label>
+              <input id="w-name" name="name" type="text" required>
+            </div>
+            <div class="field">
+              <label for="w-phone">연락처<span class="req">*</span></label>
+              <input id="w-phone" name="phone" type="tel" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="w-email">이메일<span class="req">*</span></label>
+            <input id="w-email" name="email" type="email" required>
+          </div>
+
+          <div class="field">
+            <label for="w-brand">관심 브랜드</label>
+            <select id="w-brand" name="brand" data-brand-options>
+              <option value="">전체</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="w-message">문의 내용<span class="req">*</span></label>
+            <textarea id="w-message" name="message" required
+              placeholder="예상 발주 수량, 매장 위치, 희망 입고 시기 등을 적어주시면 조건 안내가 빠릅니다."></textarea>
+          </div>
+
+          <label class="consent">
+            <input type="checkbox" required>
+            <span>
+              거래 상담을 위한 개인정보 수집·이용에 동의합니다.
+              자세한 내용은 <a href="privacy.html">개인정보처리방침</a>을 확인해 주세요.
+            </span>
+          </label>
+
+          <button class="btn btn--primary btn--lg" type="submit">도매 문의 보내기</button>
+          <p class="notice notice--warn"></p>
+        </form>
+      </div>
+
+      <aside class="side-card">
+        <h3>다른 방법으로 연락하기</h3>
+        <dl>
+          <dt>이메일</dt>
+          <dd data-site-email></dd>
+          <dt>운영 시간</dt>
+          <dd data-site-hours></dd>
+          <dt>주문 · 배송</dt>
+          <dd><a class="link-more" data-naver-store href="#" target="_blank" rel="noopener">네이버 스토어 문의하기</a></dd>
+          <dt>인스타그램</dt>
+          <dd><a class="link-more" data-instagram href="#" target="_blank" rel="noopener">@marieyarn</a></dd>
+        </dl>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-col footer-brand">
+          <a class="logo" href="index.html">marie <em>yarn</em></a>
+          <p>해외 뜨개실을 직접 수입해 국내에 유통합니다.</p>
+        </div>
+        <div class="footer-col">
+          <h4>제품</h4>
+          <ul>
+            <li><a href="products.html">전체 제품</a></li>
+            <li><a href="brands.html">브랜드</a></li>
+            <li><a href="guide.html">실 고르기 가이드</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>안내</h4>
+          <ul>
+            <li><a href="about.html">회사 소개</a></li>
+            <li><a href="faq.html">자주 묻는 질문</a></li>
+            <li><a href="privacy.html">개인정보처리방침</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>구매 · 문의</h4>
+          <ul>
+            <li><a data-naver-store href="#" target="_blank" rel="noopener">네이버 스토어</a></li>
+            <li><a data-instagram href="#" target="_blank" rel="noopener">인스타그램</a></li>
+            <li><a href="contact.html">도매 · 취급 문의</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="biz-info" data-biz></div>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/contact.js"></script>
+</body>
+</html>

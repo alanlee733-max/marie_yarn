@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>전체 제품 — marie yarn</title>
+  <meta name="description" content="marie yarn이 수입하는 뜨개실 전체 목록입니다. 브랜드, 굵기, 소재, 색 계열로 골라보세요.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="logo" href="index.html">marie <em>yarn</em></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav">메뉴</button>
+      <nav class="nav" id="nav">
+        <a href="products.html" aria-current="page">제품</a>
+        <a href="brands.html">브랜드</a>
+        <a href="guide.html">실 고르기</a>
+        <a href="about.html">소개</a>
+        <a href="contact.html">문의</a>
+      </nav>
+      <a class="btn btn--naver header-cta" data-naver-store href="#" target="_blank" rel="noopener">네이버 스토어</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="page-head">
+      <div class="wrap">
+        <h1>전체 제품</h1>
+        <p>
+          굵기와 소재를 먼저 정하고, 색은 그다음에 고르는 편이 실패가 적습니다.
+          어떤 기준으로 골라야 할지 모르겠다면 <a class="link-more" href="guide.html">실 고르기 가이드</a>를 먼저 보세요.
+        </p>
+      </div>
+    </div>
+
+    <div class="wrap catalog-layout">
+      <aside class="filters" id="filters" aria-label="제품 필터"></aside>
+
+      <div>
+        <div class="catalog-bar">
+          <p class="result-count" id="result-count" role="status"></p>
+          <div style="display:flex; gap:10px; align-items:center">
+            <button class="btn btn--ghost filter-toggle" id="filter-toggle" type="button"
+                    aria-expanded="false" aria-controls="filters">필터</button>
+            <label class="sr-only" for="sort">정렬</label>
+            <select class="sort-select" id="sort">
+              <option value="new">신상품순</option>
+              <option value="name">이름순</option>
+              <option value="price_asc">낮은 가격순</option>
+              <option value="price_desc">높은 가격순</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="product-grid" id="catalog-grid"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div class="footer-col footer-brand">
+          <a class="logo" href="index.html">marie <em>yarn</em></a>
+          <p>해외 뜨개실을 직접 수입해 국내에 유통합니다.</p>
+        </div>
+        <div class="footer-col">
+          <h4>제품</h4>
+          <ul>
+            <li><a href="products.html">전체 제품</a></li>
+            <li><a href="brands.html">브랜드</a></li>
+            <li><a href="guide.html">실 고르기 가이드</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>안내</h4>
+          <ul>
+            <li><a href="about.html">회사 소개</a></li>
+            <li><a href="faq.html">자주 묻는 질문</a></li>
+            <li><a href="privacy.html">개인정보처리방침</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>구매 · 문의</h4>
+          <ul>
+            <li><a data-naver-store href="#" target="_blank" rel="noopener">네이버 스토어</a></li>
+            <li><a data-instagram href="#" target="_blank" rel="noopener">인스타그램</a></li>
+            <li><a href="contact.html">도매 · 취급 문의</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="biz-info" data-biz></div>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/catalog.js"></script>
+</body>
+</html>
