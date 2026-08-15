@@ -213,7 +213,10 @@ main { position: relative; }
 .media-placeholder, .editorial-placeholder { background: var(--paper-deep); border: 1px solid var(--line-soft); color: rgba(28,36,38,.35); display: grid; place-items: center; letter-spacing: .18em; font-size: 9px; overflow: hidden; }
 .media-placeholder img, .editorial-placeholder img { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform .7s cubic-bezier(.2,.65,.2,1); }
 .yarn-card:hover .media-placeholder img, .journal-card:hover .media-placeholder img, .lookbook-feature:hover .editorial-placeholder img { transform: scale(1.025); }
-.yarn-card .media-placeholder { aspect-ratio: 4 / 5; }
+/* Every yarn source is a 900x900 square. A 4/5 card cropped 20% off the
+   width of all four, which only showed on yarn-04, where the dried stems
+   reach the frame edges and a pod was being sliced through its middle. */
+.yarn-card .media-placeholder { aspect-ratio: 1 / 1; }
 .card-meta { display: flex; justify-content: space-between; gap: 16px; padding-top: 18px; }
 .card-brand { font-size: 8px; letter-spacing: .18em; color: var(--muted); }
 .card-meta h3 { margin: 6px 0 0; font-family: var(--display); font-size: 18px; font-weight: 500; letter-spacing: -.015em; }
