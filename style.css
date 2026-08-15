@@ -155,7 +155,11 @@ main { position: relative; }
    yarn, collar and dried stems all stay in shot. */
 .hero-media {
   position: absolute; top: 0; bottom: 0; right: 0; left: auto;
-  aspect-ratio: 1536 / 1024; min-width: 64%;
+  /* The box holds the photograph's own ratio, so cover never crops. Do not
+     add a min-width: it only binds past ~1875px, where it widens the box
+     past 3:2 and cover then trims top and bottom — and the dried stems sit
+     on the very bottom edge of the frame, so they go first. */
+  aspect-ratio: 1536 / 1024;
   z-index: 0;
 }
 .hero-media img {
@@ -317,8 +321,10 @@ main { position: relative; }
   /* Narrow viewports cannot carry a side-by-side hero: the photograph
      moves behind the copy and the scrim turns vertical. */
   .hero { height: auto; min-height: 560px; align-items: flex-end; padding: 150px 0 72px; }
-  .hero-media { inset: 0; aspect-ratio: auto; min-width: 0; }
-  .hero-media img { object-position: 68% top; }
+  .hero-media { inset: 0; aspect-ratio: auto; }
+  /* Narrow viewports cannot hold 3:2, so something must go. Anchor to the
+     bottom: the top of the frame is empty backdrop, the bottom has the stems. */
+  .hero-media img { object-position: 68% bottom; }
   .hero-media::after {
     background: linear-gradient(180deg,
       rgba(var(--hero-panel-rgb), .30) 0%,
