@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f5f1ea" />
+  <meta name="description" content="MARIE YARN — 마리얀. 좋은 실을 고르고, 오래 만드는 것에 대하여." />
+  <title>MARIE YARN — 마리얀</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Manrope:wght@400;500&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="site-shell" id="top">
+
+    <!-- =====================================================
+         GLOBAL HEADER
+         ===================================================== -->
+    <header class="site-header" id="siteHeader">
+      <div class="header-inner">
+        <a class="brand" href="#top" aria-label="MARIE YARN home">
+          <span class="brand-name">MARIE YARN</span>
+          <span class="brand-sub">마리얀</span>
+        </a>
+
+        <nav class="desktop-nav" aria-label="Primary navigation">
+          <a href="#yarn">YARN</a>
+          <a href="#knit">KNIT</a>
+          <a href="#brand">BRAND</a>
+          <a href="#journal">JOURNAL</a>
+          <a href="#about">ABOUT</a>
+        </nav>
+
+        <div class="header-actions">
+          <button class="icon-button" type="button" aria-label="Search" data-action="search">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="10.8" cy="10.8" r="5.4"></circle>
+              <path d="m15 15 4.3 4.3"></path>
+            </svg>
+          </button>
+          <button class="icon-button" type="button" aria-label="Shopping bag" data-action="bag">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6.8 8.5h10.4l1 11H5.8l1-11Z"></path>
+              <path d="M9.1 9V6.8a2.9 2.9 0 0 1 5.8 0V9"></path>
+            </svg>
+          </button>
+          <button class="menu-button" type="button" aria-label="Open menu" aria-expanded="false" data-menu-toggle>
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MOBILE NAV -->
+    <div class="mobile-menu" aria-hidden="true">
+      <nav aria-label="Mobile navigation">
+        <a href="#yarn">YARN</a>
+        <a href="#knit">KNIT</a>
+        <a href="#brand">BRAND</a>
+        <a href="#journal">JOURNAL</a>
+        <a href="#about">ABOUT</a>
+      </nav>
+      <p class="mobile-menu-caption">Natural yarns, thoughtful choices.</p>
+    </div>
+
+    <main>
+      <!-- ===================================================
+           00. HERO — DESIGN COMPLETE / KEEP AS REFERENCE
+           =================================================== -->
+      <section class="hero" id="hero" aria-labelledby="hero-title">
+        <div class="hero-media" aria-hidden="true">
+          <img src="hero-clean.png" alt="" />
+        </div>
+
+        <div class="hero-copy">
+          <p class="eyebrow">MARIE YARN · SEOUL</p>
+          <h1 id="hero-title">Natural yarns,<br />thoughtful choices.</h1>
+          <p class="hero-korean">자연에서 온 실, 오래도록 함께할 가치를 만듭니다.</p>
+          <a class="hero-link" href="#yarn">EXPLORE YARNS <span aria-hidden="true">↗</span></a>
+        </div>
+
+        <div class="hero-meta" aria-hidden="true">
+          <span>01</span><span class="hero-rule"></span><span>07</span>
+        </div>
+        <div class="hero-scroll">SCROLL TO DISCOVER</div>
+      </section>
+
+      <!-- ===================================================
+           01. BRAND STATEMENT
+           Purpose: brand philosophy / emotional pause
+           =================================================== -->
+      <section class="section section-statement" id="statement" data-section="brand-statement">
+        <div class="section-inner statement-inner">
+          <div class="section-index">01</div>
+          <div class="statement-copy">
+            <p class="section-kicker">OUR APPROACH</p>
+            <h2 class="statement-title">Yarn worth<br />making with.</h2>
+            <p class="statement-description">
+              <!-- CONTENT SLOT -->
+              좋은 실을 고르고, 오래 만드는 것에 대한 마리얀의 기준이 들어갈 자리.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           02. SELECTED YARNS
+           Purpose: first commercial / product discovery block
+           =================================================== -->
+      <section class="section section-yarn" id="yarn" data-section="selected-yarns">
+        <div class="section-inner">
+          <div class="section-heading-row">
+            <div>
+              <p class="section-kicker">02 · SELECTED YARNS</p>
+              <h2 class="section-title">Selected Yarns</h2>
+            </div>
+            <a class="text-link" href="#yarn">VIEW ALL YARNS <span>↗</span></a>
+          </div>
+
+          <div class="yarn-grid" aria-label="Yarn product grid placeholder">
+            <article class="yarn-card">
+              <div class="media-placeholder"><img src="assets/yarn-01.png" alt="Ivory yarn" /></div>
+              <div class="card-meta">
+                <div><span class="card-brand">BRAND</span><h3>Product Name</h3></div>
+                <div class="card-spec">100% WOOL<br />DK WEIGHT</div>
+              </div>
+            </article>
+            <article class="yarn-card">
+              <div class="media-placeholder"><img src="assets/yarn-02.png" alt="Soft neutral yarn texture" /></div>
+              <div class="card-meta">
+                <div><span class="card-brand">BRAND</span><h3>Product Name</h3></div>
+                <div class="card-spec">MIXTURE<br />FINGERING</div>
+              </div>
+            </article>
+            <article class="yarn-card">
+              <div class="media-placeholder"><img src="assets/yarn-03.png" alt="Natural knit yarn texture" /></div>
+              <div class="card-meta">
+                <div><span class="card-brand">BRAND</span><h3>Product Name</h3></div>
+                <div class="card-spec">100% ALPACA<br />DK WEIGHT</div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           03. MATERIAL / ORIGIN
+           Purpose: provenance / material storytelling
+           =================================================== -->
+      <section class="section section-origin" id="origin" data-section="material-origin">
+        <div class="section-inner origin-layout">
+          <div class="origin-copy">
+            <p class="section-kicker">03 · MATERIAL / ORIGIN</p>
+            <h2 class="section-title">From northern<br />landscapes.</h2>
+            <p class="section-description">
+              원산지, 소재, 생산지와 선택 기준을 소개하는 에디토리얼 영역.
+            </p>
+            <div class="origin-list">
+              <span>DENMARK</span>
+              <span>NORWAY</span>
+              <span>SWEDEN</span>
+              <span>FINLAND</span>
+            </div>
+          </div>
+          <div class="editorial-placeholder"><img src="assets/origin.png" alt="Natural yarn and knit textures" /></div>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           04. KNIT / LOOKBOOK
+           Purpose: yarn -> finished object connection
+           =================================================== -->
+      <section class="section section-knit" id="knit" data-section="knit-lookbook">
+        <div class="section-inner">
+          <div class="section-heading-row">
+            <div>
+              <p class="section-kicker">04 · KNIT / LOOKBOOK</p>
+              <h2 class="section-title">Knit with Marie Yarn</h2>
+            </div>
+            <a class="text-link" href="#knit">VIEW PROJECTS <span>↗</span></a>
+          </div>
+
+          <div class="lookbook-feature">
+            <div class="editorial-placeholder editorial-placeholder-large"><img src="assets/knit.png" alt="Ivory knitted garment texture" /></div>
+            <div class="lookbook-copy">
+              <p class="section-kicker">PROJECT 01</p>
+              <h3>Project Name</h3>
+              <p>사용 실 / 컬러 / 필요한 수량 / 패턴 정보가 들어갈 영역.</p>
+              <a class="text-link" href="#">VIEW PROJECT <span>↗</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           05. COLLECTION
+           Purpose: browse by category / material / weight
+           =================================================== -->
+      <section class="section section-collection" id="collection" data-section="collection">
+        <div class="section-inner">
+          <div class="section-heading-row">
+            <div>
+              <p class="section-kicker">05 · COLLECTION</p>
+              <h2 class="section-title">Explore by material.</h2>
+            </div>
+          </div>
+
+          <div class="collection-list">
+            <a class="collection-item" href="#"><span>01</span><strong>WOOL</strong><em>→</em></a>
+            <a class="collection-item" href="#"><span>02</span><strong>ALPACA</strong><em>→</em></a>
+            <a class="collection-item" href="#"><span>03</span><strong>MOHAIR</strong><em>→</em></a>
+            <a class="collection-item" href="#"><span>04</span><strong>LINEN</strong><em>→</em></a>
+            <a class="collection-item" href="#"><span>05</span><strong>COTTON</strong><em>→</em></a>
+            <a class="collection-item" href="#"><span>06</span><strong>BLENDS</strong><em>→</em></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           06. JOURNAL
+           Purpose: content / expertise / brand authority
+           =================================================== -->
+      <section class="section section-journal" id="journal" data-section="journal">
+        <div class="section-inner">
+          <div class="section-heading-row">
+            <div>
+              <p class="section-kicker">06 · JOURNAL</p>
+              <h2 class="section-title">Notes on yarn,<br />making and material.</h2>
+            </div>
+            <a class="text-link" href="#journal">VIEW JOURNAL <span>↗</span></a>
+          </div>
+
+          <div class="journal-grid">
+            <article class="journal-card">
+              <div class="media-placeholder"><img src="assets/journal-01.png" alt="Yarn texture close-up" /></div>
+              <div class="journal-card-copy"><span>ARTICLE</span><h3>Journal Title</h3><p>콘텐츠 제목 및 요약이 들어갈 자리.</p></div>
+            </article>
+            <article class="journal-card">
+              <div class="media-placeholder"><img src="assets/journal-02.png" alt="Soft knit detail" /></div>
+              <div class="journal-card-copy"><span>ARTICLE</span><h3>Journal Title</h3><p>콘텐츠 제목 및 요약이 들어갈 자리.</p></div>
+            </article>
+            <article class="journal-card">
+              <div class="media-placeholder"><img src="assets/journal-03.png" alt="Natural textile with dried stems" /></div>
+              <div class="journal-card-copy"><span>ARTICLE</span><h3>Journal Title</h3><p>콘텐츠 제목 및 요약이 들어갈 자리.</p></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================
+           07. ABOUT / CTA
+           Purpose: brand closing / conversion into relationship
+           =================================================== -->
+      <section class="section section-about" id="about" data-section="about">
+        <div class="section-inner about-inner">
+          <p class="section-kicker">07 · ABOUT MARIE YARN</p>
+          <h2 class="about-title">Thoughtfully selected.<br />Made to stay.</h2>
+          <div class="about-bottom-row">
+            <p>마리얀의 브랜드 소개, 큐레이션 기준, 향후 입점 브랜드와 이야기로 연결되는 영역.</p>
+            <a class="text-link" href="#about">ABOUT MARIE YARN <span>↗</span></a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+    <footer class="site-footer" id="footer">
+      <div class="footer-inner">
+        <div class="footer-brand-block">
+          <a class="brand footer-brand" href="#top">
+            <span class="brand-name">MARIE YARN</span>
+            <span class="brand-sub">마리얀</span>
+          </a>
+          <p>Natural yarns,<br />thoughtfully selected.</p>
+        </div>
+
+        <div class="footer-nav-group">
+          <div class="footer-column">
+            <span class="footer-label">SHOP</span>
+            <a href="#yarn">All Yarns</a>
+            <a href="#collection">Collections</a>
+          </div>
+          <div class="footer-column">
+            <span class="footer-label">KNIT</span>
+            <a href="#knit">Lookbook</a>
+            <a href="#knit">Projects</a>
+          </div>
+          <div class="footer-column">
+            <span class="footer-label">JOURNAL</span>
+            <a href="#journal">Stories</a>
+            <a href="#journal">Notes</a>
+          </div>
+          <div class="footer-column">
+            <span class="footer-label">ABOUT</span>
+            <a href="#about">Marie Yarn</a>
+            <a href="#about">Contact</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 MARIE YARN CO., LTD.</span>
+        <span>SEOUL, KOREA</span>
+        <div class="footer-legal">
+          <a href="#">PRIVACY</a>
+          <a href="#">TERMS</a>
+          <a href="#">INSTAGRAM</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- =======================================================
+       PRODUCT DETAIL OUTLINE ONLY
+       Not rendered in V1. This is the future detail-page DOM
+       skeleton to preserve information architecture.
+       ======================================================= -->
+  <template id="product-detail-template">
+    <main class="product-page">
+      <div class="product-page-header"></div>
+
+      <section class="product-hero">
+        <div class="product-gallery">
+          <div class="product-image product-image-primary"></div>
+          <div class="product-image product-image-secondary"></div>
+          <div class="product-image product-image-detail"></div>
+        </div>
+
+        <aside class="product-purchase-panel">
+          <div class="product-eyebrow"><!-- BRAND --></div>
+          <h1 class="product-title"><!-- PRODUCT NAME --></h1>
+          <div class="product-price"><!-- PRICE --></div>
+
+          <div class="product-option product-color-option">
+            <div class="option-label"><!-- COLOR --></div>
+            <div class="color-swatches"><!-- SWATCHES --></div>
+          </div>
+
+          <div class="product-option product-quantity-option">
+            <div class="option-label"><!-- QUANTITY --></div>
+            <div class="quantity-control"><!-- - / QTY / + --></div>
+          </div>
+
+          <button class="product-add-button">ADD TO BAG</button>
+        </aside>
+      </section>
+
+      <section class="product-information">
+        <div class="product-material">
+          <p class="section-kicker">MATERIAL</p>
+          <div class="product-material-copy"></div>
+        </div>
+
+        <div class="product-specification">
+          <p class="section-kicker">SPECIFICATION</p>
+          <dl class="spec-list">
+            <div><dt>Composition</dt><dd></dd></div>
+            <div><dt>Weight</dt><dd></dd></div>
+            <div><dt>Length</dt><dd></dd></div>
+            <div><dt>Needle</dt><dd></dd></div>
+            <div><dt>Gauge</dt><dd></dd></div>
+            <div><dt>Origin</dt><dd></dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="product-colors">
+        <p class="section-kicker">COLORS</p>
+        <div class="product-color-grid"><!-- COLOR ITEMS --></div>
+      </section>
+
+      <section class="product-knit">
+        <div class="section-heading-row"></div>
+        <div class="related-knit-grid"><!-- KNIT PROJECTS --></div>
+      </section>
+
+      <section class="product-related">
+        <div class="related-yarns"><!-- RELATED YARNS --></div>
+        <div class="recommended-products"><!-- YOU MAY ALSO LIKE --></div>
+      </section>
+    </main>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
