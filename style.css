@@ -16,9 +16,11 @@
   --dark-ground-deep: #1f2829; /* Footer */
   --on-dark: #edefef;
 
-  /* 02 is a sans-led direction: the display role is a grotesk. */
-  --display: "Inter", system-ui, -apple-system, Arial, sans-serif;
-  --text: "Inter", system-ui, -apple-system, Arial, sans-serif;
+  /* 02 is a sans-led direction: the display role is a grotesk.
+     Inter sets the Latin, Pretendard picks up every Hangul glyph behind
+     it, then system Korean faces if the CDN is unreachable. */
+  --display: "Inter", "Pretendard Variable", Pretendard, system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --text: "Inter", "Pretendard Variable", Pretendard, system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 
   /* Three deliberate insets, widest for the hero copy. */
   --pad-header: clamp(20px, 2.9vw, 52px);
@@ -37,6 +39,9 @@ body {
   font-family: var(--text);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Korean breaks on word boundaries, not mid-word */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 a { color: inherit; text-decoration: none; }
