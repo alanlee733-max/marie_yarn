@@ -17,9 +17,12 @@
   --on-dark: #edefef;
 
   /* 02 is a sans-led direction: the display role is a grotesk.
-     Inter sets the Latin, Pretendard picks up every Hangul glyph behind
-     it, then system Korean faces if the CDN is unreachable. */
-  --display: "Inter", "Pretendard Variable", Pretendard, system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+     Schibsted Grotesk — Norwegian, built for editorial — carries the
+     display type; Inter stays on body and UI where it is steadier at
+     small sizes. Pretendard picks up every Hangul glyph behind both,
+     then system Korean faces if a CDN is unreachable.
+     Note: Schibsted's weight axis starts at 400, so no lighter grade. */
+  --display: "Schibsted Grotesk", "Inter", "Pretendard Variable", Pretendard, system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --text: "Inter", "Pretendard Variable", Pretendard, system-ui, -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 
   /* Three deliberate insets, widest for the hero copy. */
